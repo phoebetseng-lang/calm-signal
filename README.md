@@ -121,7 +121,15 @@ A flight-deck / mission-ops instrument style: graphite panels on an engineering 
 
 ## About the team
 
-Team developers received a 2026 SMART on FHIR national Top 50 award and took part in the 2026 Taiwan Connectathon (FHIR interoperability testing).
+<img src="docs/team_phoebe.jpg" width="140" alt="Phoebe Tseng, team lead">
+
+**Phoebe Tseng (曾允蓮) · Team Lead**
+
+- Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)
+- Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)
+- Featured in [Storm Media (Taiwan, 2026-09-09)](https://www.storm.mg/article/11163136) on on-premise medical AI and SMART on FHIR
+
+That interoperability experience shaped the FHIR recovery handoff in this demo. Photo: 蔡孝如攝 / Storm Media.
 
 ## How to run
 
@@ -186,6 +194,8 @@ The prototype code (HTML, CSS, and JavaScript) was written with AI coding tools 
 The challenge idea (an offline self-assessment dashboard, labeled simulated indicators, official quotes, real instrument radiation context, and next actions decided by the crew) was chosen by the team, not proposed by a model as the solution idea.
 
 ## References (software, data, and tools)
+
+- Storm Media (Taiwan), interview with the team lead on on-premise medical AI and SMART on FHIR, 2026-09-09: https://www.storm.mg/article/11163136 (team photo credit: 蔡孝如攝 / Storm Media)
 
 Shipped with this folder:
 

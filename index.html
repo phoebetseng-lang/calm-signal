@@ -438,6 +438,12 @@
     .pain-strip b { color: var(--amber); font-weight: 500; } .pain-strip i { color: var(--teal); font-style: normal; }
     .pain-strip a.more { color: var(--teal); border-style: dashed; }
     #ai-status.recorded { font-family: var(--f-mono); font-size: 10.5px; color: var(--amber); border-left: 2px solid var(--amber); padding: 4px 8px; background: #0b1013; }
+    .team-fig { display: flex; gap: 14px; align-items: flex-start; margin: 6px 0 8px; }
+    .team-fig img { width: 96px; height: 96px; object-fit: cover; border-radius: 3px; border: 1px solid var(--hair2); flex: none; filter: saturate(.9); }
+    .team-fig b { color: var(--ink); font-weight: 600; font-size: 13.5px; }
+    .team-list { margin: 6px 0 4px; padding-left: 16px; font-size: 12.5px; } .team-list li { margin: 2px 0; } .team-list a { color: var(--teal); }
+    .team-credit { font-family: var(--f-mono); font-size: 10px; color: var(--muted); }
+    @media (max-width: 520px) { .team-fig { flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -670,6 +676,14 @@
       </section>
       <section class="card" id="about-team">
         <h2 id="t-team">About the team</h2>
+        <figure class="team-fig">
+          <img src="docs/team_phoebe.jpg" width="120" height="120" alt="Phoebe Tseng, team lead" loading="lazy">
+          <figcaption>
+            <b>Phoebe Tseng (曾允蓮) · Team Lead</b>
+            <ul class="team-list" id="team-list"></ul>
+            <span class="team-credit" id="team-credit"></span>
+          </figcaption>
+        </figure>
         <p class="muted team-cred" id="team-cred"></p>
       </section>
     </div>
@@ -899,7 +913,7 @@ const T2 = {
     btnFhir:"Build FHIR handoff", btnDl:"Download JSON",
     fhirDone:(n)=>"Built a FHIR R4 Bundle with "+n+" resources on this device. Nothing was sent.",
     teamTitle:"About the team",
-    teamCred:"Team developers received a 2026 SMART on FHIR national Top 50 award and took part in the 2026 Taiwan Connectathon (FHIR interoperability testing). That interoperability experience shaped the FHIR recovery handoff demo above.",
+    teamCred:"That FHIR interoperability experience shaped the recovery handoff demo above.",
     why:"Rule check"
   },
   zh: {
@@ -924,7 +938,7 @@ const T2 = {
     btnFhir:"產生 FHIR 交接資料", btnDl:"下載 JSON",
     fhirDone:(n)=>"已在本機產生含 "+n+" 個資源的 FHIR R4 Bundle，沒有傳送任何資料。",
     teamTitle:"關於團隊",
-    teamCred:"團隊開發者獲得 2026 SMART on FHIR 全國 50 大獎項，並參加 2026 台灣聯測松（FHIR 互通測試）。這些互通經驗促成了上方的 FHIR 返航交接示範。",
+    teamCred:"這些 FHIR 互通經驗促成了上方的返航交接示範。",
     why:"規則檢查"
   }
 };
@@ -2287,8 +2301,14 @@ var DEPLOY = {
 function srcLinks(arr){ return arr.map(function(s){ return "<a href='" + s[1] + "' target='_blank' rel='noopener'>" + s[0] + "</a>"; }).join(" · "); }
 var PAIN_STRIP = { en:[["Comms delay","on-device AI"],["Non-physician CMO","explainable rules"],["Under-reporting","crew-owned log"],["Medical privacy","no network"],["Recovery handoff","FHIR R4"]], zh:[["通訊延遲","地端 AI"],["醫官非醫師","可解釋規則"],["症狀少報","太空人自主紀錄"],["醫療隱私","不連網"],["返航交接","FHIR R4"]] };
 function renderPainStrip(){ var el = $("pain-strip"); if (!el) return; el.innerHTML = PAIN_STRIP[lang].map(function(x){ return "<span><b>" + x[0] + "</b> → <i>" + x[1] + "</i></span>"; }).join("") + "<a class='more' href='#pain-panel'>" + (lang==="zh" ? "PX-00 出處 ↓" : "PX-00 sources ↓") + "</a>"; }
+var TEAM = {
+  en: { list:["Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)","Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)","Featured in <a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>Storm Media (Taiwan, 2026-09-09)</a> on on-premise medical AI and SMART on FHIR"], credit:"Photo: 蔡孝如攝 / Storm Media" },
+  zh: { list:["2026 SMART on FHIR 全國 50 大得獎（台灣）","參加 2026 台灣聯測松（FHIR 互通測試）","接受<a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>風傳媒專訪（2026-09-09）</a>，談地端醫療 AI 與 SMART on FHIR"], credit:"照片：蔡孝如攝 / 風傳媒" }
+};
+function renderTeam(){ var t = TEAM[lang]; if (!$("team-list")) return; $("team-list").innerHTML = t.list.map(function(x){ return "<li>" + x + "</li>"; }).join(""); $("team-credit").textContent = t.credit; }
 function renderFuture(){
   renderPainStrip();
+  renderTeam();
   var p = PAIN[lang];
   $("t-pain").textContent = p.title; $("pain-intro").textContent = p.intro;
   ["ph-1","ph-2","ph-3"].forEach(function(id,i){ $(id).textContent = p.heads[i]; });
