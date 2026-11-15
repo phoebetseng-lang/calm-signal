@@ -437,6 +437,7 @@
     .pain-strip a, .pain-strip span { border: 1px solid var(--line); border-radius: 2px; padding: 3px 7px; color: #c9d3d7; text-decoration: none; background: #0b1013; }
     .pain-strip b { color: var(--amber); font-weight: 500; } .pain-strip i { color: var(--teal); font-style: normal; }
     .pain-strip a.more { color: var(--teal); border-style: dashed; }
+    #ai-status.recorded { font-family: var(--f-mono); font-size: 10.5px; color: var(--amber); border-left: 2px solid var(--amber); padding: 4px 8px; background: #0b1013; }
   </style>
 </head>
 <body>
@@ -1310,6 +1311,25 @@ function parseAiText(text){
   return {summary, options};
 }
 
+// Recorded on-device model output (same request this page builds). Inline copy so file:// works.
+/*AI_SAMPLE_BEGIN*/var AI_SAMPLE_INLINE = {"model": "qwen3.8-flash-next", "machine": "local workstation, vLLM server on the LAN (no cloud)", "recorded_at": "2026-11-15 21:10 UTC+8", "latency_ms": 8777, "request_sha256": "3eb8e33d292011fcd382a7b77bf6cf1977b91aa9106ca03b0e2d984b84a0c801", "content": "SUMMARY:\nThe radiation data from instrument DosTel1 on UTC date 2022-03-26 shows a daily median of 5.175938 microGy/h and a daily mean of 32.147604 microGy/h based on 1198 samples. Your simulated health indicators show lower sleep and mood, plus a higher heart rate compared to earlier days in this demo. These health numbers are from a simulated session and are not real medical records. The radiation figures are public ISS instrument telemetry and do not reflect your personal exposure.\n\nOPTIONS:\n1. Review your sleep schedule and try to increase rest time to better match your early-session averages.\n2. Check in with your crewmates or ground team about your current mood and stress levels.\n3. Monitor your heart rate trends over the next few hours to see if it returns to baseline.\n\nThe crew member decides what to do next."};/*AI_SAMPLE_END*/
+var AI_SAMPLE_CACHE;
+function isDemoMode(){ try { return new URLSearchParams(location.search).get("demo") === "1"; } catch(e){ return false; } }
+async function loadAiSample(){
+  if (AI_SAMPLE_CACHE !== undefined) return AI_SAMPLE_CACHE;
+  var s = null;
+  if (typeof location !== "undefined" && location.protocol !== "file:" && typeof fetch === "function"){
+    try { var r = await fetch("data/local_ai_sample.json", {cache:"no-store"}); if (r.ok) s = await r.json(); } catch(e){ s = null; }
+  }
+  if (!s || !s.content) s = AI_SAMPLE_INLINE;
+  AI_SAMPLE_CACHE = (s && s.content) ? s : null;
+  return AI_SAMPLE_CACHE;
+}
+function recordedLabel(s){
+  return lang === "zh"
+    ? "地端模型事先錄下的實際輸出（" + s.model + "，" + s.recorded_at + "）— 與本頁產生的請求相同；啟動你自己的本機模型即可重新產生。"
+    : "Recorded output from an on-device model (" + s.model + ", " + s.recorded_at + ") — same request this page builds; run your own local model to regenerate.";
+}
 let aiBusy = false;
 async function requestAiSummary(){
   const t = txt();
@@ -1330,6 +1350,7 @@ async function requestAiSummary(){
     ]
   };
   try {
+    if (isDemoMode() && await loadAiSample() && radiationForDay(day) && AI_SAMPLE_CACHE.content.indexOf(radiationForDay(day).utc_date) >= 0) throw new Error("demo uses recorded sample");
     const ctrl = new AbortController();
     const timer = setTimeout(function(){ ctrl.abort(); }, 90000);
     const res = await fetch(url, {
@@ -1346,10 +1367,22 @@ async function requestAiSummary(){
     const parsed = parseAiText(text);
     showAiResult("ai", t.aiDraft, parsed.summary, parsed.options);
     status.textContent = "";
+    status.classList.remove("recorded");
   } catch (err){
-    const fb = ruleBasedSummary();
-    showAiResult(fb.mode, fb.tag, fb.summary, fb.options);
-    status.textContent = t.aiUnavailable;
+    let sample = await loadAiSample();
+    const rd = radiationForDay(day);
+    if (sample && !(rd && sample.content.indexOf(rd.utc_date) >= 0)) sample = null; // recorded for another day: don't show it
+    if (sample){
+      const ps = parseAiText(sample.content);
+      showAiResult("ai", t.aiDraft, ps.summary, ps.options);
+      status.textContent = recordedLabel(sample);
+      status.classList.add("recorded");
+    } else {
+      const fb = ruleBasedSummary();
+      showAiResult(fb.mode, fb.tag, fb.summary, fb.options);
+      status.textContent = t.aiUnavailable;
+      status.classList.remove("recorded");
+    }
   } finally {
     aiBusy = false;
     btn.disabled = false;
@@ -1509,7 +1542,7 @@ var T3 = {
       ["Solution","CREATIVITY","On-device AI, crew decides","Rules and an optional small local model run on the crew device. Try the Earth link button: everything keeps working offline."],
       ["Proof","VALIDITY","Real NASA radiation data","ISS DosTel1 absorbed dose rate from NASA OSDR RadLab (19 Mar–1 Apr 2022), shown next to clearly labeled simulated vitals."],
       ["Explainable","VALIDITY","Every cue shows its rule","No black box: each review cue prints the rule and the values that triggered it. Decision support, not a diagnosis."],
-      ["Local AI","CREATIVITY","Local AI summary","Sent only to the local endpoint you set. If no model answers, a rule-based summary appears, so it works with no link."],
+      ["Local AI","CREATIVITY","Local AI summary","Sent only to the local endpoint you set. With no model running, the page shows a labeled recorded output from an on-device model, or a rule-based summary."],
       ["Impact","IMPACT","FHIR recovery handoff","One standard FHIR R4 Bundle for sea, air and ground recovery teams (simulated, nothing sent)."]
     ]
   },
@@ -1546,7 +1579,7 @@ var T3 = {
       ["解法","創意","地端 AI，太空人決定","規則與可選的本機小型模型都在太空人裝置上執行。按下地球通訊按鈕：斷線後一切照常運作。"],
       ["證據","可信度","真實 NASA 輻射資料","NASA OSDR RadLab 的 ISS DosTel1 吸收劑量率（2022-03-19 至 04-01），與明確標示的模擬生理數值並列。"],
       ["可解釋","可信度","每個提醒都附規則","不是黑盒子：每個提醒都列出觸發它的規則與數值。僅為決策輔助，不是診斷。"],
-      ["地端 AI","創意","本機 AI 摘要","只送到你設定的本機端點。若沒有模型回應，會改用規則式摘要，斷線也能用。"],
+      ["地端 AI","創意","本機 AI 摘要","只送到你設定的本機端點。沒有啟動模型時，會顯示標明為事先錄下的地端模型輸出，或規則式摘要。"],
       ["影響","影響力","FHIR 返航救援交接","一份標準 FHIR R4 Bundle，給海、空、陸救援團隊（模擬，不會傳送）。"]
     ]
   }
@@ -1971,7 +2004,7 @@ var VAL = {
   en: {
     title:"Validation status & live self-test",
     okH:"Verified (software checks, run live below)",
-    ok:["Rule engine gives the expected cues on known inputs","FHIR R4 Bundle structure, LOINC codes and references","RadLab data: embedded daily table matches the 14-day file; raw file SHA-256 matches SOURCES.md (hosted page or Node)","No external network requests; no third-party scripts","CSV import accepts valid files and rejects malformed ones"],
+    ok:["Rule engine gives the expected cues on known inputs","FHIR R4 Bundle structure, LOINC codes and references","RadLab data: embedded daily table matches the 14-day file; raw file SHA-256 matches SOURCES.md (hosted page or Node)","No external network requests; no third-party scripts","CSV import accepts valid files and rejects malformed ones","Recorded on-device model output parses and keeps the RadLab figures unaltered (when shipped)"],
     noH:"Not verified",
     no:["Clinical validation or accuracy of any threshold","Use with real crew or real sensors","Conformance to a specific FHIR implementation guide","Medical-device certification (none claimed)"],
     run:"Run self-test", running:"Running…",
@@ -1983,7 +2016,7 @@ var VAL = {
   zh: {
     title:"驗證狀態與即時自我測試",
     okH:"已驗證（軟體檢查，下方即時執行）",
-    ok:["規則引擎對已知輸入產生預期的提醒","FHIR R4 Bundle 結構、LOINC 編碼與引用","RadLab 資料：內嵌每日表與 14 日檔案一致；原始檔 SHA-256 與 SOURCES.md 相符（線上頁面或 Node）","沒有外部網路請求；沒有第三方程式","CSV 匯入接受正確檔案、拒絕格式錯誤的檔案"],
+    ok:["規則引擎對已知輸入產生預期的提醒","FHIR R4 Bundle 結構、LOINC 編碼與引用","RadLab 資料：內嵌每日表與 14 日檔案一致；原始檔 SHA-256 與 SOURCES.md 相符（線上頁面或 Node）","沒有外部網路請求；沒有第三方程式","CSV 匯入接受正確檔案、拒絕格式錯誤的檔案","事先錄下的地端模型輸出可正確解析，且 RadLab 數值未被改動（有附時）"],
     noH:"未驗證",
     no:["任何門檻的臨床驗證或準確度","實際太空人或真實感測器的使用","特定 FHIR 實作指引的符合性","醫療器材認證（未宣稱）"],
     run:"執行自我測試", running:"執行中…",
@@ -2098,6 +2131,33 @@ async function CS_TESTS(env){
     if (!threw) return "malformed CSV was accepted";
     return true;
   });
+
+  // T6 recorded on-device model output
+  var sample = AI_SAMPLE_INLINE;
+  if (env.readText){ try { var fs = JSON.parse(await env.readText("data/local_ai_sample.json")); if (fs && fs.content){ if (sample && sample.content !== fs.content) rec("T6a", "Inline sample equals data/local_ai_sample.json", "fail", "inline copy differs"); sample = fs; } } catch(e){} }
+  if (!sample || !sample.content){
+    rec("T6", "Recorded on-device model output: parses, radiation figures unaltered", "skip", "no recorded sample shipped; page uses rule-based fallback");
+  } else {
+    check("T6", "Recorded on-device model output: SUMMARY + options, radiation figures unaltered", function(){
+      var ps = parseAiText(sample.content);
+      if (!/SUMMARY:/i.test(sample.content) || !ps.summary) return "no SUMMARY";
+      if (ps.options.length < 2) return "fewer than 2 options";
+      var r = RADIATION_DAILY.find(function(x){ return sample.content.indexOf(x.utc_date) >= 0; });
+      if (!r) return "no RadLab utc_date found in output";
+      var nums = (sample.content.match(/\d[\d,]*\.?\d*/g) || []).map(function(x){ return x.replace(/,/g,""); });
+      var matches = function(v){ return nums.some(function(x){ var d = (x.split(".")[1] || "").length; return d >= 1 && Math.abs(+x - v) <= 0.5 * Math.pow(10, -d) + 1e-9; }); };
+      var miss = [];
+      if (!matches(r.median_uGy_per_h)) miss.push("daily_median");
+      if (!matches(r.mean_uGy_per_h)) miss.push("daily_mean");
+      if (nums.indexOf(String(r.n_samples)) < 0) miss.push("n_samples");
+      if (miss.length) return "figures missing or altered: " + miss.join(", ") + " (" + r.utc_date + ")";
+      var stats = [r.median_uGy_per_h, r.mean_uGy_per_h, r.min_uGy_per_h, r.max_uGy_per_h];
+      var rad = []; var re = /(\d[\d,]*\.?\d*)\s*(?:µGy|uGy|microGy|μGy)/gi, m;
+      while ((m = re.exec(sample.content))){ var x = m[1].replace(/,/g,""), d = (x.split(".")[1] || "").length; if (!stats.some(function(v){ return Math.abs(+x - v) <= 0.5 * Math.pow(10, -d) + 1e-9; })) rad.push(x); }
+      if (rad.length) return "radiation values not in RadLab for " + r.utc_date + ": " + rad.join(", ");
+      return true;
+    });
+  }
   return out;
 }
 

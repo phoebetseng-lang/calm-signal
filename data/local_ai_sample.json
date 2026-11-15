@@ -1,0 +1,8 @@
+{
+  "model": "qwen3.8-flash-next",
+  "machine": "local workstation, vLLM server on the LAN (no cloud)",
+  "recorded_at": "2026-11-15 21:10 UTC+8",
+  "latency_ms": 8777,
+  "request_sha256": "3eb8e33d292011fcd382a7b77bf6cf1977b91aa9106ca03b0e2d984b84a0c801",
+  "content": "SUMMARY:\nThe radiation data from instrument DosTel1 on UTC date 2022-03-26 shows a daily median of 5.175938 microGy/h and a daily mean of 32.147604 microGy/h based on 1198 samples. Your simulated health indicators show lower sleep and mood, plus a higher heart rate compared to earlier days in this demo. These health numbers are from a simulated session and are not real medical records. The radiation figures are public ISS instrument telemetry and do not reflect your personal exposure.\n\nOPTIONS:\n1. Review your sleep schedule and try to increase rest time to better match your early-session averages.\n2. Check in with your crewmates or ground team about your current mood and stress levels.\n3. Monitor your heart rate trends over the next few hours to see if it returns to baseline.\n\nThe crew member decides what to do next."
+}

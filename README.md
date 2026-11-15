@@ -1,10 +1,31 @@
 # Calm Signal — Crew Health Review
 
-A 2026 NASA Space Apps Challenge prototype for the official challenge **Create Health Monitoring Software for Astronauts on Space Missions**.
+**Crew medical self-review that keeps working when Earth is minutes away.**
 
-Official challenge: https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/
+![Calm Signal first screen: signal-delay orbit, on-device AI, NASA RadLab data, FHIR recovery handoff](docs/hero.png)
+
+On a Mars mission a reply from Earth can take over 20 minutes, and the link can drop for weeks. Calm Signal runs entirely on the crew's own device: transparent rules flag changes against each crew member's own baseline and print the exact rule, an optional on-device small language model drafts a plain-English briefing, and the crew member decides and logs what to do. Radiation context is real public NASA OSDR RadLab telemetry (ISS DosTel1, 16,802 readings), and at splashdown the session exports as one HL7 FHIR R4 Bundle for sea, air and ground recovery teams. No server, no account, no network.
+
+- **Live demo:** https://phoebetseng-lang.github.io/calm-signal/
+- **30-second scripted walkthrough:** https://phoebetseng-lang.github.io/calm-signal/?demo=1
+- **Challenge:** [Create Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/) (NASA Space Apps 2026)
 
 This is a decision-support demo, not a medical device. It does not diagnose, treat, or predict disease, and it does not report a validated accuracy. The crew member decides every next action.
+
+## Judge 60-second tour
+
+1. **0–10 s:** open the live demo. Panel 01 shows the Earth–Mars signal delay computed live; press **B** (or *Earth link*) to cut the link. Everything keeps working.
+2. **10–25 s:** press **Judge quick tour** (or **T**). It spotlights the real RadLab data, the review cues with their exact rules, and the local AI summary.
+3. **25–40 s:** open **See handoff** to build the FHIR R4 Bundle (LOINC vitals, cues, crew decisions) and watch it route to sea / air / ground teams.
+4. **40–60 s:** scroll to **QA-01**. The self-test runs live in your browser (9 checks, pass/fail with timestamp). The same suite runs with `node tests/run-tests.mjs`.
+
+| On-device AI (recorded output, labeled) | Live self-test |
+|---|---|
+| ![Local AI panel showing recorded on-device model output](docs/demo-on-device-ai.png) | ![QA-01 self-test panel](docs/self-test.png) |
+
+## Recorded on-device model output
+
+Without a running local model, the AI panel shows a **recorded** output from an on-device model, clearly labeled with model name and time. It was produced on 2026-11-15 21:10 (UTC+8) by `qwen3.8-flash-next` served locally with vLLM (8.8 s), from exactly the request this page builds for demo day 8 (`data/local_ai_sample.json`, with the request SHA-256). The model text is embedded verbatim. Self-test **T6** checks it parses into SUMMARY + options and that every radiation figure equals the RadLab value for that day. Start your own OpenAI-compatible local model (e.g. Ollama at `http://localhost:11434/v1`) and the live output replaces it.
 
 ## Features
 
@@ -71,6 +92,7 @@ node tests/run-tests.mjs
 | T3 / T3b / T3c | RadLab table has 14 consecutive UTC days and 16,802 readings; equals `data/radlab/iss_dostel1_daily.json`; raw CSV SHA-256 equals `data/radlab/SOURCES.md` |
 | T4 | No third-party scripts, styles or network requests (optional on-device AI on localhost is allowed) |
 | T5 | CSV import accepts a valid file and rejects a malformed one |
+| T6 | Recorded on-device model output parses into SUMMARY + options; its radiation figures equal the RadLab values for that day |
 
 **Verified:** the software checks above. **Not verified:** clinical validity of any threshold, use with real crew or sensors, conformance to a specific FHIR implementation guide. No medical-device certification is claimed. See [CHANGELOG.md](CHANGELOG.md).
 
