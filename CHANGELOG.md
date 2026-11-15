@@ -13,6 +13,9 @@ All dates Asia/Taipei. Commit hashes refer to this repository.
   - T5 CSV import accepts a valid file and rejects a malformed one
 - `tests/run-tests.mjs`: the same suite in Node (no dependencies). Verified it fails when a threshold, a LOINC code, or the raw data file is altered.
 - Build label, changelog link and data provenance line in the app.
+- Pain point → innovation map (PX-00) with public NASA / IOM sources, plus a one-line strip on the first screen.
+- Roadmap / path to flight panel (FX-01), labeled FUTURE: analogs → LEO → Artemis → Mars, planned capabilities, Earth spin-off. No partnerships implied.
+- Deploy it today panel (DX-01): offline single file, 3-step how to run, pilot-ready (not deployed) line.
 
 ## v3.1 — 2026-11-15 (df8d6c7)
 Flight-deck visual identity: graphite / phosphor teal / sodium amber, monospaced telemetry, panel IDs, SVG wordmark and icons, instrument ticks.

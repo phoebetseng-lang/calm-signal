@@ -18,6 +18,42 @@ This is a decision-support demo, not a medical device. It does not diagnose, tre
 - Official NASA HRP hazard short descriptions and challenge-listed partner pages, quoted with links.
 - Optional CSV import of another local simulated session (`data/sample-session.csv`).
 
+## Pain point → our innovation
+
+| Real problem (public source) | What Calm Signal does | Why it is new |
+|---|---|---|
+| **Mars comms delay.** One-way delay up to ~22 min, blackouts up to weeks; ground surgeons become consultants, not directors of care. [NASA Mars comms delay](https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf), [NASA ExMC ConOps](https://ntrs.nasa.gov/citations/20200001715) | On-device AI: rules and an optional local model run with the Earth link off | ISS care leans on real-time ground flight surgeons; here the first review happens on board, with no round trip |
+| **CMO may not be a physician.** CMOs often are, but are not required to be, physicians; ISS CMO training is about 40 h. [NASA-STD-3001 §5.2.1](https://www.nasa.gov/reference/5-0-training/), [NTRS 20130013532](https://ntrs.nasa.gov/citations/20130013532) | Explainable rules: every cue prints the exact rule and the triggering numbers | Not a black-box score; a non-physician can check why in seconds |
+| **Symptoms go unreported.** Incidence may be underestimated due to astronauts' reluctance to report. [NASA OCHMO TB-014](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-014-behavioral-health-mishaps.pdf), [IOM *Safe Passage* ch. 8](https://www.ncbi.nlm.nih.gov/books/NBK223775/) | Short self check-in kept on the device; the crew decides and logs the action | Crew-owned, not surveillance. It does not fix culture on its own |
+| **Medical data must stay private.** Crew medical communications and records are private under the Privacy Act. [NASA-STD-3001 §6.2](https://www.nasa.gov/reference/6-0-medical-operations/), [§7.3](https://www.nasa.gov/reference/7-0-crew-health-records/) | No network calls; nothing leaves the device unless the crew exports it (self-test T4) | Privacy by architecture, not only by policy |
+| **Many hands at recovery.** After splashdown, rescue teams tend to the crew, then the crew is airlifted for further medical attention. [NASA crew rescue & recovery](https://www.nasa.gov/humans-in-space/nasas-spacex-crew-rescue-and-recovery/) | One HL7 FHIR R4 Bundle (LOINC vitals, cues with rules, crew decisions) for sea, air and ground teams | A standard package any FHIR system can read. Demo only: built on the device, not sent |
+
+## Deploy it today
+
+- One static HTML file: no install, no account, no server
+- Runs fully offline from a USB stick, laptop or tablet browser
+- No GPU or cloud needed; the rule engine is plain JavaScript
+- Optional local model through an OpenAI-compatible endpoint (for example Ollama on localhost)
+- CSV import: device exports mapped to `day,sys,dia,hr,glu,temp,sleep,mood` load directly
+- HL7 FHIR R4 export for EHR interoperability
+- One-command self-test: `node tests/run-tests.mjs`
+
+**How to run:** (1) copy the repo folder, or just `index.html`, to any device; (2) open `index.html` in a modern browser, no network needed; (3) optional: start a local model, and run `node tests/run-tests.mjs` to verify the build.
+
+**Pilot-ready for Earth analogs** (offshore, polar, remote clinics): it can be trialed as is. It is not deployed anywhere today and has no customers.
+
+## Roadmap / path to flight (FUTURE: planned, not built)
+
+No partnerships, funding or approvals are implied.
+
+1. **Now:** prototype (this demo): rule engine, crew decision log, FHIR R4 export, live self-test, NASA RadLab context.
+2. **Earth analog missions:** trial in isolated, delayed-comms analogs such as [NASA HERA](https://www.nasa.gov/mission/hera/) and [CHAPEA](https://www.nasa.gov/humans-in-space/chapea/), or polar stations like [ESA Concordia](https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Concordia).
+3. **LEO, ISS and [commercial stations](https://www.nasa.gov/humans-in-space/commercial-space/commercial-space-stations/):** real sensor ingest alongside existing medical operations; compare cues with flight-surgeon review.
+4. **[Artemis](https://www.nasa.gov/humans-in-space/artemis/) lunar surface:** per-crew baselines and a multi-crew view for the CMO.
+5. **Mars transit:** fully Earth-independent first review; FHIR sync when the link returns.
+
+Planned capabilities: wearable and multimodal sensor ingest; an on-board small model fine-tuned on each crew member's own baseline; FHIR / SMART on FHIR interop with ground EHRs; a multi-crew dashboard for the Crew Medical Officer. Earth spin-off: remote and rural clinics; polar, offshore and maritime crews; disaster zones with no connectivity.
+
 ## Testing and validation (v3.2)
 
 The app runs a live **self-test** (panel QA-01) when it opens, and again with **Run self-test**. Each check shows PASS, FAIL or SKIP with a UTC timestamp. SKIP means the check could not run in that context (for example a browser opened from `file://` cannot read the data files); it is never counted as a pass.

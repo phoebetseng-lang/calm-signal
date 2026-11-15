@@ -410,6 +410,33 @@
     .st-list .fail { color: #ff6b5b; border-color: rgba(255,107,91,.6); }
     .st-list .skip { color: var(--muted); border-color: var(--line); }
     .st-list .d { display: block; font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); margin-top: 2px; word-break: break-word; }
+
+    /* ---- v3.3: pain map, roadmap, deploy ---- */
+    .pain-wrap { padding: 16px 20px 0; }
+    .pain-d { font-family: var(--f-ui); font-weight: 400; color: #c9d3d7; font-size: 12px; margin-top: 3px; white-space: normal; }
+    .pain-s { font-family: var(--f-mono); font-weight: 400; font-size: 10px; margin-top: 4px; white-space: normal; }
+    .pain-s a { color: var(--teal); }
+    #pain-panel .scen-table td:first-child { white-space: normal; width: 36%; }
+    .fut-wrap { padding: 16px 20px 0; display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+    @media (max-width: 1000px) { .fut-wrap { grid-template-columns: 1fr; } }
+    .road-tag { display: inline-block; font-family: var(--f-mono); font-size: 10px; letter-spacing: .14em; color: var(--amber); border: 1px dashed var(--amber); padding: 2px 8px; border-radius: 2px; margin-bottom: 6px; }
+    .road-track { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; position: relative; }
+    @media (max-width: 900px) { .road-track { grid-template-columns: 1fr; } }
+    .road-track li { border: 1px dashed var(--line); border-top: 2px solid var(--hair2); border-radius: 3px; padding: 8px 9px; background: #0b1013; font-size: 12px; }
+    .road-track li.now { border-style: solid; border-top-color: var(--teal); }
+    .road-track li .k { display: block; font-family: var(--f-mono); font-size: 10px; letter-spacing: .14em; color: var(--muted); }
+    .road-track li.now .k { color: var(--teal); }
+    .road-track li b { display: block; margin: 2px 0 4px; color: var(--ink); font-weight: 600; font-size: 12.5px; }
+    .road-track li p { margin: 0; color: #c9d3d7; line-height: 1.4; }
+    .road-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    @media (max-width: 700px) { .road-cols { grid-template-columns: 1fr; } }
+    .dep-list { margin: 6px 0 0; padding-left: 16px; font-size: 12.5px; } .dep-list li { margin: 3px 0; }
+    .dep-how { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; } .dep-how li { margin: 3px 0; }
+    .dep-pilot { margin: 10px 0 0; padding: 8px 10px; border-left: 2px solid var(--amber); font-size: 12px; color: #c9d3d7; background: #0b1013; }
+    .pain-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; font-family: var(--f-mono); font-size: 10.5px; }
+    .pain-strip a, .pain-strip span { border: 1px solid var(--line); border-radius: 2px; padding: 3px 7px; color: #c9d3d7; text-decoration: none; background: #0b1013; }
+    .pain-strip b { color: var(--amber); font-weight: 500; } .pain-strip i { color: var(--teal); font-style: normal; }
+    .pain-strip a.more { color: var(--teal); border-style: dashed; }
   </style>
 </head>
 <body>
@@ -443,6 +470,7 @@
         </div>
         <p class="tagline" id="hero-tag"></p>
         <p class="lede muted" id="hero-lede"></p>
+        <div class="pain-strip" id="pain-strip"></div>
       </div>
       <div class="cta">
         <button type="button" class="btn-glow" id="btn-tour">Judge quick tour</button>
@@ -494,6 +522,13 @@
       <ul class="crit-list" id="crit-list"></ul>
     </div>
   </section>
+  <div class="pain-wrap">
+    <section class="card enter" id="pain-panel" style="--d:.68s">
+      <h2 id="t-pain" data-pid="PX-00">Pain point → our innovation</h2>
+      <p class="muted" id="pain-intro"></p>
+      <table class="scen-table"><thead><tr><th id="ph-1"></th><th id="ph-2"></th><th id="ph-3"></th></tr></thead><tbody id="pain-body"></tbody></table>
+    </section>
+  </div>
   <div class="scen-wrap">
     <section class="card enter" id="scen-panel" style="--d:.7s">
       <h2 id="t-scen" data-pid="SC-00">Field-checked scenarios</h2>
@@ -638,6 +673,25 @@
       </section>
     </div>
   </main>
+  <div class="fut-wrap">
+    <section class="card" id="road-panel">
+      <h2 id="t-road" data-pid="FX-01">Roadmap</h2>
+      <span class="road-tag" id="road-tag"></span>
+      <p class="muted" id="road-intro" style="margin:0"></p>
+      <ol class="road-track" id="road-track"></ol>
+      <div class="road-cols">
+        <div class="val-block"><h4 id="road-feat-h" style="color:var(--teal)"></h4><ul id="road-feat"></ul></div>
+        <div class="val-block"><h4 id="road-earth-h" style="color:var(--teal)"></h4><ul id="road-earth"></ul></div>
+      </div>
+    </section>
+    <section class="card" id="deploy-panel">
+      <h2 id="t-deploy" data-pid="DX-01">Deploy it today</h2>
+      <ul class="dep-list" id="dep-facts"></ul>
+      <h4 id="dep-how-h" style="margin:12px 0 0;font-family:var(--f-mono);font-weight:500;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)"></h4>
+      <ol class="dep-how" id="dep-how"></ol>
+      <p class="dep-pilot" id="dep-pilot"></p>
+    </section>
+  </div>
   <div class="tour-ring" id="tour-ring"></div>
   <div class="tour-card" id="tour-card" role="dialog" aria-live="polite">
     <div class="tour-prog"><i id="tour-bar"></i></div>
@@ -950,6 +1004,7 @@ function applyLang(){
   if (window.V3READY) applyLang3();
   if (window.V3READY && window.SCEN) renderScen();
   if (window.V3READY && window.VAL) renderVal();
+  if (window.V3READY && window.PAIN) renderFuture();
   render();
 }
 
@@ -2094,6 +2149,106 @@ if (typeof document !== "undefined" && document.getElementById("btn-selftest")){
   if (!window.CS_NODE) setTimeout(runSelfTest, 600);
 }
 window.CS_TESTS = CS_TESTS;
+// ---- v3.3: pain → innovation, roadmap (FUTURE), deploy today ----
+var PAIN = {
+  en: { title:"Pain point → our innovation", intro:"Five problems NASA documents today, and what Calm Signal does differently. Each pain links its public source.",
+    heads:["Real problem (source)","What Calm Signal does","Why it is new"],
+    rows:[
+      ["Mars comms delay", "One-way delay up to ~22 min, blackouts up to weeks; ground surgeons become consultants, not directors of care.", [["NASA Mars comms delay","https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf"],["NASA ExMC ConOps","https://ntrs.nasa.gov/citations/20200001715"]],
+        "On-device AI: rules and an optional local model run with the Earth link OFF (try the blackout toggle).", "ISS care leans on real-time ground flight surgeons; here the first review happens on board, with no round trip."],
+      ["CMO may not be a physician", "NASA: CMOs often are, but are not required to be, physicians; ISS CMO training is about 40 h.", [["NASA-STD-3001 §5.2.1","https://www.nasa.gov/reference/5-0-training/"],["NTRS 20130013532","https://ntrs.nasa.gov/citations/20130013532"]],
+        "Explainable rules: every cue prints the exact rule and the numbers that triggered it.", "Not a black-box score: a non-physician can check why in seconds."],
+      ["Symptoms go unreported", "Incidence may be underestimated due to astronauts' reluctance to report.", [["NASA OCHMO TB-014","https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-014-behavioral-health-mishaps.pdf"],["IOM Safe Passage ch.8","https://www.ncbi.nlm.nih.gov/books/NBK223775/"]],
+        "Short self check-in (sleep, mood) kept on the device; the crew decides and logs the action.", "Crew-owned, not surveillance: a low-friction way to notice trends early. It does not fix culture on its own."],
+      ["Medical data must stay private", "NASA treats crew medical communications and records as private under the Privacy Act.", [["NASA-STD-3001 §6.2","https://www.nasa.gov/reference/6-0-medical-operations/"],["§7.3","https://www.nasa.gov/reference/7-0-crew-health-records/"]],
+        "No network calls; nothing leaves the device unless the crew exports it. Self-test T4 checks this live.", "Privacy by architecture, not only by policy."],
+      ["Many hands at recovery", "After splashdown, rescue teams tend to the crew, then the crew is airlifted for further medical attention.", [["NASA crew rescue & recovery","https://www.nasa.gov/humans-in-space/nasas-spacex-crew-rescue-and-recovery/"]],
+        "One HL7 FHIR R4 Bundle (LOINC vitals, cues with rules, crew decisions) for sea, air and ground teams.", "A standard package any FHIR system can read. Demo only: built on the device, not sent."]
+    ]},
+  zh: { title:"痛點 → 我們的創新", intro:"NASA 現在就有記載的五個問題，以及 Calm Signal 的不同做法。每個痛點都附公開出處。",
+    heads:["真實問題（出處）","Calm Signal 怎麼做","為什麼是新的"],
+    rows:[
+      ["火星通訊延遲", "單程延遲最長約 22 分鐘，可能中斷數週；地面醫師變成顧問，不再直接主導照護。", [["NASA 火星通訊延遲","https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf"],["NASA ExMC ConOps","https://ntrs.nasa.gov/citations/20200001715"]],
+        "地端 AI：規則與選用的本機模型在地球連線中斷時照樣運作（可按通訊中斷開關試試）。", "太空站照護仰賴地面醫師即時支援；這裡第一輪判讀在船上完成，不必等來回通訊。"],
+      ["隨隊醫官不一定是醫師", "NASA：CMO 常是、但不必是醫師；太空站 CMO 訓練約 40 小時。", [["NASA-STD-3001 §5.2.1","https://www.nasa.gov/reference/5-0-training/"],["NTRS 20130013532","https://ntrs.nasa.gov/citations/20130013532"]],
+        "可解釋規則：每個提醒都列出完整規則與觸發數值。", "不是黑箱分數：非醫師也能幾秒內看懂原因。"],
+      ["症狀常被少報", "因太空人不願回報，實際發生率可能被低估。", [["NASA OCHMO TB-014","https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-014-behavioral-health-mishaps.pdf"],["IOM Safe Passage 第 8 章","https://www.ncbi.nlm.nih.gov/books/NBK223775/"]],
+        "簡短自評（睡眠、情緒）只存在裝置上；由太空人決定並記錄處置。", "資料屬於太空人，不是監控；以低負擔方式及早看出趨勢。單靠工具無法改變文化。"],
+      ["醫療資料必須保密", "NASA 依隱私法將太空人醫療通訊與紀錄視為私密資料。", [["NASA-STD-3001 §6.2","https://www.nasa.gov/reference/6-0-medical-operations/"],["§7.3","https://www.nasa.gov/reference/7-0-crew-health-records/"]],
+        "不發出任何網路請求；除非太空人自己匯出，資料不離開裝置。自我測試 T4 即時檢查。", "隱私靠架構保證，不只靠規定。"],
+      ["返航交接環節多", "濺落後由救援隊先照顧太空人，再空運接受進一步醫療。", [["NASA 太空人救援與回收","https://www.nasa.gov/humans-in-space/nasas-spacex-crew-rescue-and-recovery/"]],
+        "一份 HL7 FHIR R4 Bundle（LOINC 生理數值、附規則的提醒、太空人決策）給海、空、地團隊。", "任何支援 FHIR 的系統都讀得懂的標準格式。僅為示範：在裝置上產生，未實際傳送。"]
+    ]}
+};
+var ROAD = {
+  en: { title:"Roadmap / path to flight", tag:"FUTURE · PLANNED, NOT BUILT", intro:"Planned stages. No partnerships, funding or approvals are implied.",
+    stages:[
+      ["NOW","Prototype (this demo)","Rule engine, crew decision log, FHIR R4 export, live self-test, NASA RadLab context.",null],
+      ["NEXT","Earth analog missions","Trial in isolated, delayed-comms analogs such as NASA HERA and CHAPEA, or polar stations like Concordia.",[["NASA HERA","https://www.nasa.gov/mission/hera/"],["NASA CHAPEA","https://www.nasa.gov/humans-in-space/chapea/"],["ESA Concordia","https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Concordia"]]],
+      ["LEO","ISS & commercial stations","Real sensor ingest alongside existing medical operations; compare cues with flight-surgeon review.",[["NASA commercial stations","https://www.nasa.gov/humans-in-space/commercial-space/commercial-space-stations/"]]],
+      ["MOON","Artemis lunar surface","Seconds of delay and surface EVAs: per-crew baselines and multi-crew view for the CMO.",[["NASA Artemis","https://www.nasa.gov/humans-in-space/artemis/"]]],
+      ["MARS","Mars transit","Minutes of delay and weeks of blackout: fully Earth-independent first review, FHIR sync when the link returns.",[["NASA Distance from Earth","https://www.nasa.gov/hrp/hazard-distance-from-earth/"]]]
+    ],
+    featH:"Planned capabilities", feats:["Wearable and multimodal sensor ingest (HR, BP, sleep, activity)","On-board small model fine-tuned on each crew member's own baseline","FHIR / SMART on FHIR interop with ground EHRs","Multi-crew dashboard for the Crew Medical Officer"],
+    earthH:"Earth spin-off", earth:["Remote and rural clinics","Polar, offshore and maritime crews","Disaster zones with no connectivity"] },
+  zh: { title:"未來路線 / 邁向太空", tag:"未來規劃 · 尚未實作", intro:"以下為規劃中的階段，不代表已有任何合作、經費或核准。",
+    stages:[
+      ["現在","原型（本示範）","規則引擎、太空人決策紀錄、FHIR R4 匯出、即時自我測試、NASA RadLab 環境資料。",null],
+      ["下一步","地球模擬任務","在隔離、通訊延遲的模擬任務試用，例如 NASA HERA、CHAPEA，或 Concordia 等極地站。",[["NASA HERA","https://www.nasa.gov/mission/hera/"],["NASA CHAPEA","https://www.nasa.gov/humans-in-space/chapea/"],["ESA Concordia","https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Concordia"]]],
+      ["近地軌道","太空站與商業太空站","接入真實感測器，與現有醫療作業並行；比對提醒與航太醫師判讀。",[["NASA 商業太空站","https://www.nasa.gov/humans-in-space/commercial-space/commercial-space-stations/"]]],
+      ["月球","Artemis 月面任務","數秒延遲與月面艙外活動：個人基準線與給醫官的多人總覽。",[["NASA Artemis","https://www.nasa.gov/humans-in-space/artemis/"]]],
+      ["火星","火星航程","數分鐘延遲、數週中斷：完全不依賴地球的第一輪判讀，連線恢復後以 FHIR 同步。",[["NASA 遠離地球","https://www.nasa.gov/hrp/hazard-distance-from-earth/"]]]
+    ],
+    featH:"規劃功能", feats:["穿戴式與多模態感測器接入（心率、血壓、睡眠、活動）","船上小模型，以每位太空人自己的基準線微調","與地面電子病歷以 FHIR / SMART on FHIR 互通","給隨隊醫官的多人總覽儀表板"],
+    earthH:"地球應用", earth:["偏鄉與離島診所","極地、離岸與遠洋船員","沒有網路的災區"] }
+};
+var DEPLOY = {
+  en: { title:"Deploy it today", facts:[
+      "One static HTML file: no install, no account, no server",
+      "Runs fully offline from a USB stick, laptop or tablet browser",
+      "No GPU or cloud needed; the rule engine is plain JavaScript",
+      "Optional local model through an OpenAI-compatible endpoint (e.g. Ollama on localhost)",
+      "CSV import: device exports mapped to day,sys,dia,hr,glu,temp,sleep,mood load directly",
+      "HL7 FHIR R4 export for EHR interoperability",
+      "One-command self-test: node tests/run-tests.mjs"],
+    howH:"How to run", how:["Download or copy the repo folder (or just index.html) to any device.","Open index.html in a modern browser. Works with no network.","Optional: start a local model, then run node tests/run-tests.mjs to verify the build."],
+    pilot:"Pilot-ready for Earth analogs (offshore, polar, remote clinics): it can be trialed as is. It is not deployed anywhere today and has no customers." },
+  zh: { title:"今天就能部署", facts:[
+      "單一靜態 HTML 檔：免安裝、免帳號、免伺服器",
+      "可從 USB 隨身碟、筆電或平板瀏覽器完全離線執行",
+      "不需要 GPU 或雲端；規則引擎是純 JavaScript",
+      "選用本機模型：OpenAI 相容端點（例如本機的 Ollama）",
+      "CSV 匯入：裝置匯出的資料對應成 day,sys,dia,hr,glu,temp,sleep,mood 即可載入",
+      "HL7 FHIR R4 匯出，可與電子病歷互通",
+      "一行指令自我測試：node tests/run-tests.mjs"],
+    howH:"如何執行", how:["把 repo 資料夾（或只要 index.html）下載或複製到任何裝置。","用新版瀏覽器打開 index.html，不需要網路。","選用：啟動本機模型；執行 node tests/run-tests.mjs 驗證版本。"],
+    pilot:"已可在地球模擬場域試行（離岸、極地、偏鄉診所）：可直接拿去試用。目前沒有任何實際部署，也沒有客戶。" }
+};
+function srcLinks(arr){ return arr.map(function(s){ return "<a href='" + s[1] + "' target='_blank' rel='noopener'>" + s[0] + "</a>"; }).join(" · "); }
+var PAIN_STRIP = { en:[["Comms delay","on-device AI"],["Non-physician CMO","explainable rules"],["Under-reporting","crew-owned log"],["Medical privacy","no network"],["Recovery handoff","FHIR R4"]], zh:[["通訊延遲","地端 AI"],["醫官非醫師","可解釋規則"],["症狀少報","太空人自主紀錄"],["醫療隱私","不連網"],["返航交接","FHIR R4"]] };
+function renderPainStrip(){ var el = $("pain-strip"); if (!el) return; el.innerHTML = PAIN_STRIP[lang].map(function(x){ return "<span><b>" + x[0] + "</b> → <i>" + x[1] + "</i></span>"; }).join("") + "<a class='more' href='#pain-panel'>" + (lang==="zh" ? "PX-00 出處 ↓" : "PX-00 sources ↓") + "</a>"; }
+function renderFuture(){
+  renderPainStrip();
+  var p = PAIN[lang];
+  $("t-pain").textContent = p.title; $("pain-intro").textContent = p.intro;
+  ["ph-1","ph-2","ph-3"].forEach(function(id,i){ $(id).textContent = p.heads[i]; });
+  $("pain-body").innerHTML = p.rows.map(function(r,i){
+    return "<tr><td><span>P" + (i+1) + "</span>" + r[0] + "<div class='pain-d'>" + r[1] + "</div><div class='pain-s'>" + srcLinks(r[2]) + "</div></td><td>" + r[3] + "</td><td class='lim'>" + r[4] + "</td></tr>";
+  }).join("");
+  var r = ROAD[lang];
+  $("t-road").textContent = r.title; $("road-tag").textContent = r.tag; $("road-intro").textContent = r.intro;
+  $("road-track").innerHTML = r.stages.map(function(s,i){
+    return "<li class='" + (i===0 ? "now" : "") + "'><span class='k'>" + s[0] + "</span><b>" + s[1] + "</b><p>" + s[2] + "</p>" + (s[3] ? "<div class='pain-s'>" + srcLinks(s[3]) + "</div>" : "") + "</li>";
+  }).join("");
+  $("road-feat-h").textContent = r.featH; $("road-feat").innerHTML = r.feats.map(function(x){ return "<li>" + x + "</li>"; }).join("");
+  $("road-earth-h").textContent = r.earthH; $("road-earth").innerHTML = r.earth.map(function(x){ return "<li>" + x + "</li>"; }).join("");
+  var d = DEPLOY[lang];
+  $("t-deploy").textContent = d.title;
+  $("dep-facts").innerHTML = d.facts.map(function(x){ return "<li>" + x + "</li>"; }).join("");
+  $("dep-how-h").textContent = d.howH; $("dep-how").innerHTML = d.how.map(function(x){ return "<li>" + x + "</li>"; }).join("");
+  $("dep-pilot").textContent = d.pilot;
+}
+if (typeof document !== "undefined" && document.getElementById("pain-body")) renderFuture();
 </script>
 </body>
 </html>
