@@ -2,7 +2,7 @@
 
 All dates Asia/Taipei. Commit hashes refer to this repository.
 
-## v3.2 — 2026-11-15 (2f2613b)
+## v3.2 — 2026-11-15 (2830c79)
 - Field-checked scenarios table: each scenario links a public NASA source, says what Calm Signal does, and states its limits.
 - Validation status block: what is verified (software checks) and what is not (clinical validation, real crew/sensors, FHIR IG conformance, device certification).
 - Live in-browser self-test (panel QA-01), run on load and on demand, with pass / fail / skip and a UTC timestamp:
