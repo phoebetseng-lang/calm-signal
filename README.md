@@ -18,6 +18,10 @@ This is a decision-support demo, not a medical device. It does not diagnose, tre
 - Official NASA HRP hazard short descriptions and challenge-listed partner pages, quoted with links.
 - Optional CSV import of another local simulated session (`data/sample-session.csv`).
 
+## Visual identity (v3.1)
+
+A flight-deck / mission-ops instrument style: graphite panels on an engineering grid, phosphor teal for nominal and sodium amber for alerts and signal, monospaced tabular telemetry numerals, condensed uppercase labels, hairline rules with corner ticks, panel IDs (CS-01…), an inline-SVG wordmark, and motion tied to data only (orbit, replay feed, tickers, FHIR packets, a scanning line while the local AI runs).
+
 ## What's new (v3)
 
 - **60-second story for judges:** a bento-grid first screen reading 01 Problem (Earth–Mars signal delay), 02 Solution (on-device AI for crew medical review), 03 Proof (real NASA OSDR RadLab ISS DosTel1 data, 16,802 readings), 04 Impact (FHIR recovery handoff). Each tile is tagged with the judging criterion it addresses, and a judging-criteria map follows.
