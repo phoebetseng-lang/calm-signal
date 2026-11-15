@@ -160,9 +160,114 @@
     main > div { min-width: 0; }
     input[type=text] { background: #061015; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font: 13px ui-monospace, "DejaVu Sans Mono", monospace; }
     input[type=text]:focus { outline: 2px solid var(--teal2); }
+
+    /* ---- v3: 2026 mission-control look (bento, aurora, glass) ---- */
+    :root { --glass: rgba(16,40,52,.52); --glass2: rgba(10,28,38,.62); --glow: rgba(60,184,176,.35); --violet:#8f7cff; }
+    html, body { font-family: "Segoe UI Variable Text", "Segoe UI Variable", "Inter", "Noto Sans", "Noto Sans CJK TC", "Segoe UI", sans-serif; }
+    body { background: #040d13; }
+    #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
+    .aurora { position: fixed; inset: -20%; z-index: -1; pointer-events: none; opacity: .5; will-change: transform;
+      background:
+        radial-gradient(40% 30% at 20% 20%, rgba(60,184,176,.45), transparent 70%),
+        radial-gradient(35% 28% at 80% 10%, rgba(143,124,255,.38), transparent 70%),
+        radial-gradient(45% 35% at 60% 90%, rgba(224,122,95,.22), transparent 70%);
+      animation: aurora 26s ease-in-out infinite alternate; }
+    @keyframes aurora { 0% { transform: translate3d(0,0,0) rotate(0deg) scale(1); } 50% { transform: translate3d(4%,-3%,0) rotate(8deg) scale(1.08); } 100% { transform: translate3d(-4%,3%,0) rotate(-6deg) scale(1.02); } }
+    header.app { background: rgba(6,20,28,.72); }
+    section.card { background: linear-gradient(160deg, rgba(22,52,64,.78), rgba(10,28,38,.72));
+      border: 1px solid rgba(120,220,210,.14); box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05); }
+    section.card:hover { border-color: rgba(120,220,210,.32); box-shadow: 0 10px 34px rgba(0,0,0,.4), 0 0 0 1px rgba(60,184,176,.12), 0 0 28px rgba(60,184,176,.10); }
+    h2 { font-weight: 650; font-variation-settings: "wght" 650; }
+    .bento { display: grid; grid-template-columns: 1.35fr 1fr 1fr 1fr; gap: 14px; padding: 16px 20px 0; }
+    .bento .tile { position: relative; background: linear-gradient(155deg, rgba(24,58,72,.80), rgba(8,24,34,.74));
+      border: 1px solid rgba(120,220,210,.16); border-radius: 18px; padding: 14px 16px; overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .3s; }
+    .bento .tile:hover { transform: translateY(-3px); border-color: rgba(120,220,210,.38); box-shadow: 0 16px 40px rgba(0,0,0,.45), 0 0 30px var(--glow); }
+    .bento .tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: radial-gradient(600px 120px at var(--mx,50%) -10%, rgba(255,255,255,.07), transparent 60%); }
+    .tile.title { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
+    .tile.title .tagline { font-size: clamp(22px, 2.2vw, 34px); font-weight: 750; font-variation-settings: "wght" 750; letter-spacing: -.01em; margin: 6px 0 4px;
+      background: linear-gradient(90deg, #ffffff, #9ee0d8 55%, #c9bfff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .tile.title .lede { font-size: 13px; max-width: 1100px; }
+    .cta { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+    .btn-glow { position: relative; padding: 10px 16px; border-radius: 12px; font-weight: 700; color: #fff; border: 1px solid rgba(158,224,216,.6);
+      background: linear-gradient(135deg, #1f8a85, #4b3fb0); box-shadow: 0 0 0 0 rgba(60,184,176,.5); animation: ctaPulse 2.8s infinite; }
+    @keyframes ctaPulse { 0% { box-shadow: 0 0 0 0 rgba(60,184,176,.45); } 70% { box-shadow: 0 0 0 14px rgba(60,184,176,0); } 100% { box-shadow: 0 0 0 0 rgba(60,184,176,0); } }
+    .btn-link { display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+    .btn-link .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+    body.offline .btn-link .dot { background: var(--alert); box-shadow: 0 0 10px var(--alert); }
+    .story .step { font-size: 11px; font-weight: 800; letter-spacing: .14em; color: var(--teal); text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .crit { font-size: 10px; letter-spacing: .06em; padding: 2px 7px; border-radius: 999px; border: 1px solid rgba(201,191,255,.45); color: #d7d0ff; background: rgba(143,124,255,.14); font-weight: 700; white-space: nowrap; }
+    .story h3 { margin: 6px 0 4px; font-size: 17px; font-weight: 720; font-variation-settings: "wght" 720; color: #fff; }
+    .story p { margin: 0; font-size: 12.5px; color: var(--muted); }
+    .story .big { font-size: 34px; font-weight: 800; font-variation-settings: "wght" 800; line-height: 1.05; color: #fff; font-variant-numeric: tabular-nums; }
+    .story .big small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+    .tile.problem { grid-row: span 2; display: flex; flex-direction: column; }
+    #orbit { width: 100%; height: 230px; display: block; margin: 6px 0; }
+    .range { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); }
+    .range input { flex: 1; }
+    .tiny { font-size: 10.5px; color: var(--muted); line-height: 1.35; margin-top: 6px; }
+    #proof-spark, #feed-canvas { width: 100%; height: 56px; display: block; margin-top: 6px; }
+    .tile.ribbonT { grid-column: span 2; }
+    .tile.radarT canvas { width: 100%; height: 190px; display: block; }
+    .tile.critT { grid-column: 1 / -1; }
+    .crit-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; font-size: 12px; }
+    @media (max-width: 1100px) { .crit-list { grid-template-columns: 1fr; } }
+    .crit-list li { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 10px; background: rgba(143,124,255,.08); border: 1px solid rgba(143,124,255,.22); }
+    .crit-list b { min-width: 86px; color: #d7d0ff; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--alert); margin-right: 6px; animation: blink 1.2s infinite; vertical-align: middle; }
+    @keyframes blink { 50% { opacity: .25; } }
+    .feed-vals { display: flex; gap: 12px; font-variant-numeric: tabular-nums; font-size: 13px; margin-top: 4px; }
+    .feed-vals b { font-size: 20px; color: #fff; }
+    @media (max-width: 1250px) { .bento { grid-template-columns: 1fr 1fr; } .tile.problem { grid-row: auto; } .tile.ribbonT { grid-column: 1 / -1; } }
+    @media (max-width: 700px) { .bento { grid-template-columns: 1fr; } .tile.title { grid-template-columns: 1fr; } }
+    /* offline banner */
+    .offline-banner { display: none; margin: 0; padding: 9px 20px; font-size: 13px; font-weight: 700; color: #ffe1d8;
+      background: linear-gradient(90deg, rgba(140,40,30,.85), rgba(80,20,40,.85)); border-bottom: 1px solid #a04a3a; }
+    body.offline .offline-banner { display: block; position: fixed; left: 0; right: 0; top: var(--hdr, 62px); z-index: 52; box-shadow: 0 8px 24px rgba(0,0,0,.45); animation: slideDown .45s cubic-bezier(.2,.8,.2,1); }
+    @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+    /* entrance: view-transition-like */
+    .enter { animation: rise .8s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+    canvas.draw { animation: drawIn 1.4s cubic-bezier(.3,.7,.2,1) both; }
+    @keyframes drawIn { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    /* AI thinking shimmer */
+    #ai-panel.thinking { border-color: rgba(201,191,255,.6); box-shadow: 0 0 0 1px rgba(143,124,255,.35), 0 0 36px rgba(143,124,255,.25); }
+    #ai-panel.thinking #btn-ai { background: linear-gradient(100deg, #1f8a85 20%, #b9b0ff 40%, #1f8a85 60%); background-size: 250% 100%; animation: shimmer 1.1s linear infinite; }
+    #ai-panel .think { display: none; height: 64px; margin-top: 10px; border-radius: 10px;
+      background: linear-gradient(100deg, rgba(255,255,255,.03) 20%, rgba(185,176,255,.22) 40%, rgba(255,255,255,.03) 60%); background-size: 250% 100%; animation: shimmer 1.1s linear infinite; }
+    #ai-panel.thinking .think { display: block; }
+    @keyframes shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+    /* FHIR flow */
+    .flow { margin-top: 10px; border-radius: 12px; background: rgba(4,14,20,.6); border: 1px solid var(--line); padding: 6px; }
+    .flow svg { width: 100%; height: 150px; display: block; }
+    .flow .pkt { opacity: 0; }
+    .flow.live .pkt { opacity: 1; }
+    .flow text { font: 600 12px "Segoe UI", "Noto Sans", sans-serif; fill: #e8f3f4; }
+    .flow .sub { font-size: 10px; fill: #9bb4b8; font-weight: 400; }
+    /* tour */
+    .tour-ring { position: fixed; z-index: 50; border-radius: 16px; pointer-events: none; box-shadow: 0 0 0 9999px rgba(2,8,12,.62), 0 0 0 2px #9ee0d8, 0 0 40px rgba(60,184,176,.6);
+      transition: all .6s cubic-bezier(.2,.8,.2,1); display: none; }
+    .tour-card { position: fixed; z-index: 51; width: min(420px, calc(100vw - 24px)); background: rgba(10,30,40,.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(158,224,216,.5); border-radius: 16px; padding: 14px 16px; box-shadow: 0 20px 50px rgba(0,0,0,.5); display: none; transition: top .6s cubic-bezier(.2,.8,.2,1), left .6s cubic-bezier(.2,.8,.2,1); }
+    .tour-card .k { font-size: 11px; font-weight: 800; letter-spacing: .14em; color: var(--teal); text-transform: uppercase; display: flex; justify-content: space-between; }
+    .tour-card h4 { margin: 6px 0 4px; font-size: 17px; color: #fff; }
+    .tour-card p { margin: 0 0 10px; font-size: 13px; color: #cfe3e5; }
+    .tour-card .row { display: flex; gap: 6px; justify-content: flex-end; }
+    .tour-prog { height: 3px; border-radius: 3px; background: rgba(255,255,255,.1); margin: 0 0 10px; overflow: hidden; }
+    .tour-prog i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--violet)); width: 0; transition: width .5s; }
+    .kbd-hint { font-size: 11px; color: var(--muted); text-align: center; }
+    kbd { font: 11px ui-monospace, monospace; padding: 1px 5px; border: 1px solid var(--line); border-radius: 4px; background: rgba(255,255,255,.04); }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora, .btn-glow, .live-dot, .enter, canvas.draw, #ai-panel.thinking #btn-ai, #ai-panel .think, body.offline .offline-banner { animation: none !important; }
+      .tour-ring, .tour-card, .bento .tile { transition: none !important; }
+    }
   </style>
 </head>
 <body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
   <header class="app">
     <div class="logo">Calm Signal<span id="t-sub">Crew Health Review</span></div>
     <div class="grow"></div>
@@ -173,26 +278,73 @@
       <button type="button" id="lang-zh" aria-pressed="false">中文</button>
     </div>
   </header>
+  <p class="offline-banner" id="offline-banner" role="status"></p>
   <p class="disclaimer" id="disclaimer"></p>
   <div class="source-bar">
     <span class="badge sim" id="badge-sim">SIMULATED SESSION</span>
     <span id="source-note"></span>
   </div>
-  <section class="hero" aria-label="Overview">
-    <div class="hero-main">
-      <div class="pills">
-        <span class="pill ai" id="pill-ai">ON-DEVICE AI</span>
-        <span class="pill med" id="pill-med">CREW MEDICAL</span>
-        <span class="pill xai" id="pill-xai">EXPLAINABLE RULES</span>
-        <span class="pill hitl" id="pill-hitl">CREW DECIDES</span>
-        <span class="pill priv" id="pill-priv">PRIVACY BY DESIGN</span>
+  <section class="bento" aria-label="Overview">
+    <div class="tile title enter" style="--d:.05s">
+      <div>
+        <div class="pills">
+          <span class="pill ai" id="pill-ai">ON-DEVICE AI</span>
+          <span class="pill med" id="pill-med">CREW MEDICAL</span>
+          <span class="pill xai" id="pill-xai">EXPLAINABLE RULES</span>
+          <span class="pill hitl" id="pill-hitl">CREW DECIDES</span>
+          <span class="pill priv" id="pill-priv">PRIVACY BY DESIGN</span>
+        </div>
+        <p class="tagline" id="hero-tag"></p>
+        <p class="lede muted" id="hero-lede"></p>
       </div>
-      <p class="tagline" id="hero-tag"></p>
-      <p class="lede" id="hero-lede"></p>
+      <div class="cta">
+        <button type="button" class="btn-glow" id="btn-tour">Judge quick tour</button>
+        <button type="button" class="btn-link" id="btn-link"><span class="dot"></span><span id="link-label">Earth link: ONLINE</span></button>
+        <div class="kbd-hint" id="kbd-hint"></div>
+      </div>
     </div>
-    <div class="hero-main">
+    <div class="tile story problem enter" id="tile-problem" style="--d:.15s">
+      <div class="step"><span id="s1-k">01 · Problem</span><span class="crit" id="s1-c">RELEVANCE · IMPACT</span></div>
+      <h3 id="s1-h"></h3>
+      <div class="big"><span id="delay-min">–</span><small id="delay-unit">min one-way</small></div>
+      <canvas id="orbit" aria-label="Earth and Mars orbit animation with signal delay"></canvas>
+      <div class="range"><span id="phase-l">Orbit phase</span><input type="range" id="phase" min="0" max="360" value="40" aria-label="Orbit phase"><button type="button" id="orbit-play" aria-pressed="true">❚❚</button></div>
+      <p class="tiny" id="s1-note"></p>
+    </div>
+    <div class="tile story enter" id="tile-solution" style="--d:.25s">
+      <div class="step"><span id="s2-k">02 · Solution</span><span class="crit" id="s2-c">CREATIVITY</span></div>
+      <h3 id="s2-h"></h3>
+      <p id="s2-p"></p>
+      <div class="feed-vals" aria-live="off"><span><span class="live-dot"></span><b id="feed-hr">–</b> bpm</span><span><b id="feed-bp">–</b> mm Hg</span><span><b id="feed-sl">–</b> h</span></div>
+      <canvas id="feed-canvas" aria-label="Simulated live feed replay"></canvas>
+      <p class="tiny" id="feed-note"></p>
+    </div>
+    <div class="tile story enter" id="tile-proof" style="--d:.35s">
+      <div class="step"><span id="s3-k">03 · Proof</span><span class="crit" id="s3-c">VALIDITY · NASA DATA</span></div>
+      <h3 id="s3-h"></h3>
+      <div class="big"><span id="proof-n" data-to="0">0</span><small id="proof-u">readings</small></div>
+      <canvas id="proof-spark" aria-label="ISS DosTel1 daily median dose rate"></canvas>
+      <p class="tiny" id="s3-note"></p>
+    </div>
+    <div class="tile story enter" id="tile-impact" style="--d:.45s">
+      <div class="step"><span id="s4-k">04 · Impact</span><span class="crit" id="s4-c">IMPACT</span></div>
+      <h3 id="s4-h"></h3>
+      <p id="s4-p"></p>
+      <div class="btn-row"><button type="button" class="primary" id="btn-goto-fhir">See handoff</button></div>
+      <p class="tiny" id="s4-note"></p>
+    </div>
+    <div class="tile ribbonT enter" style="--d:.55s">
       <div class="ribbon" id="ribbon"></div>
       <p class="ribbon-note" id="ribbon-note"></p>
+    </div>
+    <div class="tile radarT enter" style="--d:.6s">
+      <div class="step" style="font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--teal);text-transform:uppercase" id="radar-k">Crew health radar</div>
+      <canvas id="radar" aria-label="Today's indicators versus early-days baseline"></canvas>
+      <p class="tiny" id="radar-note"></p>
+    </div>
+    <div class="tile critT enter" style="--d:.65s">
+      <div class="step" style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#d7d0ff;text-transform:uppercase" id="crit-k">Judging criteria map</div>
+      <ul class="crit-list" id="crit-list"></ul>
     </div>
   </section>
   <main>
@@ -247,6 +399,7 @@
         </div>
         <button type="button" class="primary" id="btn-ai">Local AI Summary</button>
         <p id="ai-status"></p>
+        <div class="think" aria-hidden="true"></div>
         <div class="ai-box hidden" id="ai-result" aria-live="polite">
           <div class="tag" id="ai-tag"></div>
           <p class="body" id="ai-text"></p>
@@ -263,6 +416,23 @@
         <h2 id="t-fhir">Return &amp; recovery medical handoff (FHIR)</h2>
         <span class="badge sim" id="fhir-badge">SIMULATED DEMO</span>
         <p class="muted" id="fhir-help"></p>
+        <div class="flow" id="fhir-flow" aria-label="Simulated FHIR handoff flow">
+          <svg viewBox="0 0 640 150" preserveAspectRatio="xMidYMid meet">
+            <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#3cb8b0"/><stop offset="1" stop-color="#8f7cff"/></linearGradient></defs>
+            <path id="fp1" d="M150,75 C300,75 330,25 480,25" fill="none" stroke="url(#lg)" stroke-width="2" stroke-dasharray="5 6" opacity=".7"/>
+            <path id="fp2" d="M150,75 L480,75" fill="none" stroke="url(#lg)" stroke-width="2" stroke-dasharray="5 6" opacity=".7"/>
+            <path id="fp3" d="M150,75 C300,75 330,125 480,125" fill="none" stroke="url(#lg)" stroke-width="2" stroke-dasharray="5 6" opacity=".7"/>
+            <rect x="10" y="50" width="140" height="50" rx="12" fill="#0f3a38" stroke="#3cb8b0"/>
+            <text x="80" y="72" text-anchor="middle" id="fl-dev">Crew device</text><text x="80" y="88" text-anchor="middle" class="sub">FHIR R4 Bundle</text>
+            <rect x="480" y="8" width="150" height="34" rx="10" fill="#122a3a" stroke="#4a8ab0"/><text x="555" y="30" text-anchor="middle" id="fl-sea">Sea · recovery ship</text>
+            <rect x="480" y="58" width="150" height="34" rx="10" fill="#1f1d3a" stroke="#8f7cff"/><text x="555" y="80" text-anchor="middle" id="fl-air">Air · medevac</text>
+            <rect x="480" y="108" width="150" height="34" rx="10" fill="#2a2414" stroke="#c9a24a"/><text x="555" y="130" text-anchor="middle" id="fl-gnd">Ground · landing site</text>
+            <text x="315" y="146" text-anchor="middle" class="sub" id="fl-sim">SIMULATED · nothing is sent</text>
+            <circle r="6" fill="#9ee0d8" class="pkt"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#fp1"/></animateMotion></circle>
+            <circle r="6" fill="#c9bfff" class="pkt"><animateMotion dur="1.8s" begin="0.6s" repeatCount="indefinite"><mpath href="#fp2"/></animateMotion></circle>
+            <circle r="6" fill="#f0d48a" class="pkt"><animateMotion dur="1.8s" begin="1.2s" repeatCount="indefinite"><mpath href="#fp3"/></animateMotion></circle>
+          </svg>
+        </div>
         <div class="notify" id="fhir-notify"></div>
         <div class="btn-row">
           <button type="button" class="primary" id="btn-fhir">Build FHIR handoff</button>
@@ -296,6 +466,14 @@
       </section>
     </div>
   </main>
+  <div class="tour-ring" id="tour-ring"></div>
+  <div class="tour-card" id="tour-card" role="dialog" aria-live="polite">
+    <div class="tour-prog"><i id="tour-bar"></i></div>
+    <div class="k"><span id="tour-step"></span><span class="crit" id="tour-crit"></span></div>
+    <h4 id="tour-h"></h4>
+    <p id="tour-p"></p>
+    <div class="row"><button type="button" id="tour-prev">Back</button><button type="button" id="tour-close">Close</button><button type="button" class="primary" id="tour-next">Next</button></div>
+  </div>
   <footer id="footer"></footer>
   <script>
 /* All session numbers below are simulated for the demo. They are not NASA data. */
@@ -597,6 +775,7 @@ function applyLang(){
   document.getElementById("lang-en").setAttribute("aria-pressed", lang==="en");
   document.getElementById("lang-zh").setAttribute("aria-pressed", lang==="zh");
   applyLang2();
+  if (window.V3READY) applyLang3();
   render();
 }
 
@@ -733,6 +912,7 @@ function render(){
   renderLog();
   highlightPart();
   renderRibbon();
+  if (window.V3READY) renderV3();
 }
 
 function parseCsv(text){
@@ -1063,6 +1243,400 @@ document.getElementById("btn-fhir-dl").addEventListener("click", ()=>{
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
 });
+
+// ---- v3: bento story, orbit/signal delay, live replay feed, radar, blackout, FHIR flow, judge tour, ?demo=1 ----
+var V3READY = false;
+var T3 = {
+  en: {
+    tour:"Judge quick tour", linkOn:"Earth link: ONLINE", linkOff:"Earth link: OFFLINE",
+    kbd:"Keys: <kbd>←</kbd><kbd>→</kbd> day · <kbd>B</kbd> blackout · <kbd>T</kbd> tour",
+    offline:"Earth link: OFFLINE (simulated blackout) — on-device rules, local AI and the FHIR handoff keep working. Nothing on this page needs Earth.",
+    s1k:"01 · Problem", s1c:"RELEVANCE · IMPACT", s1h:"Earth is minutes away", delayUnit:"min one-way to Mars",
+    phase:"Orbit phase",
+    s1note:"Earth–Mars one-way light time computed in this page from circular orbits (1.000 and 1.524 AU; 1 AU ≈ 499 light-seconds). Illustrative phase, not today's positions; real range is about 3–22 min. Moon: about 1.3 s.",
+    s2k:"02 · Solution", s2c:"CREATIVITY", s2h:"On-device AI for crew medical review",
+    s2p:"Transparent rules flag changes; an optional small local model drafts the summary; the crew decides. Works through a comms blackout.",
+    feedNote:"SIMULATED live feed: replays the 14-day demo session (straight-line interpolation between days). Not a sensor, not NASA data.",
+    s3k:"03 · Proof", s3c:"VALIDITY · NASA DATA", s3h:"Real ISS radiation data", proofU:"DosTel1 readings",
+    s3note:"NASA OSDR RadLab, ISS DosTel1 absorbed dose rate, 19 Mar–1 Apr 2022: total public API readings in the 14-day file, and the daily median trend.",
+    s4k:"04 · Impact", s4c:"IMPACT", s4h:"FHIR handoff for recovery",
+    s4p:"At splashdown, one standard HL7 FHIR R4 Bundle for sea, air and ground recovery medical teams.",
+    s4btn:"See handoff", s4note:"Simulated demo: built on the device, nothing is sent.",
+    radarK:"Crew health radar · today vs. own baseline",
+    radarNote:"SIMULATED SESSION. Each axis = today ÷ own days 1–3 average (dashed ring = 1.0). Red dot = a rule cue.",
+    radarAx:{sys:"BP sys", hr:"Heart rate", glu:"Blood sugar", temp:"Temp", sleep:"Sleep", mood:"Mood"},
+    critK:"Judging criteria map",
+    crit:[["Impact","Medical decisions without waiting for Earth; FHIR handoff to recovery teams."],
+          ["Creativity","On-device small model + explainable rules + crew-in-the-loop."],
+          ["Validity","Real NASA OSDR RadLab data; simulated values labeled; every cue shows its rule."],
+          ["Relevance","Challenge indicators, NASA HRP hazards, Moon/Mars comms delay."],
+          ["Presentation","Judge tour, blackout demo, bilingual EN / 中文."]],
+    flDev:"Crew device", flSea:"Sea · recovery ship", flAir:"Air · medevac", flGnd:"Ground · landing site", flSim:"SIMULATED · nothing is sent",
+    linkLost:"LINK LOST (simulated)",
+    blackH:"Comms blackout: still working", blackP:"Earth link is cut (simulated). Rules, the local AI summary and the FHIR handoff all run on the crew device.",
+    back:"Back", next:"Next", close:"Close", done:"Done",
+    steps:[
+      ["Problem","RELEVANCE","Mars is minutes away","Signal delay to Mars can exceed 20 minutes one way, and links can drop. Medical review cannot wait for Earth."],
+      ["Solution","CREATIVITY","On-device AI, crew decides","Rules and an optional small local model run on the crew device. Try the Earth link button: everything keeps working offline."],
+      ["Proof","VALIDITY","Real NASA radiation data","ISS DosTel1 absorbed dose rate from NASA OSDR RadLab (19 Mar–1 Apr 2022), shown next to clearly labeled simulated vitals."],
+      ["Explainable","VALIDITY","Every cue shows its rule","No black box: each review cue prints the rule and the values that triggered it. Decision support, not a diagnosis."],
+      ["Local AI","CREATIVITY","Local AI summary","Sent only to the local endpoint you set. If no model answers, a rule-based summary appears, so it works with no link."],
+      ["Impact","IMPACT","FHIR recovery handoff","One standard FHIR R4 Bundle for sea, air and ground recovery teams (simulated, nothing sent)."]
+    ]
+  },
+  zh: {
+    tour:"評審快速導覽", linkOn:"地球通訊：連線中", linkOff:"地球通訊：中斷",
+    kbd:"快捷鍵：<kbd>←</kbd><kbd>→</kbd> 切換日期 · <kbd>B</kbd> 通訊中斷 · <kbd>T</kbd> 導覽",
+    offline:"地球通訊：中斷（模擬）— 本機規則、地端 AI 與 FHIR 交接仍持續運作。本頁不需要地球端。",
+    s1k:"01 · 問題", s1c:"關聯性 · 影響力", s1h:"地球在幾分鐘之外", delayUnit:"分鐘（到火星單程）",
+    phase:"軌道相位",
+    s1note:"地球–火星單程光行時間由本頁以圓形軌道計算（1.000 與 1.524 AU；1 AU ≈ 499 光秒）。相位僅為示意，不是今天的實際位置；實際範圍約 3–22 分鐘。月球約 1.3 秒。",
+    s2k:"02 · 解法", s2c:"創意", s2h:"地端 AI 守護太空人醫療",
+    s2p:"透明規則標出變化；可選用本機小型模型撰寫摘要；由太空人決定。通訊中斷時照樣運作。",
+    feedNote:"模擬即時串流：重播 14 日示範時段（日與日之間以直線內插）。不是感測器，也不是 NASA 資料。",
+    s3k:"03 · 證據", s3c:"可信度 · NASA 資料", s3h:"真實的國際太空站輻射資料", proofU:"筆 DosTel1 讀數",
+    s3note:"NASA OSDR RadLab，ISS DosTel1 吸收劑量率，2022-03-19 至 04-01：14 日檔案中的公開 API 讀數總筆數，以及每日中位數趨勢。",
+    s4k:"04 · 影響", s4c:"影響力", s4h:"FHIR 返航救援交接",
+    s4p:"濺落時，產生一份標準 HL7 FHIR R4 Bundle，給海、空、陸救援醫療團隊。",
+    s4btn:"查看交接", s4note:"模擬示範：在本機產生，不會傳送。",
+    radarK:"太空人健康雷達 · 今日 vs. 自身基準",
+    radarNote:"模擬時段。每軸 = 今日 ÷ 自身第 1–3 日平均（虛線圈 = 1.0）。紅點 = 規則提醒。",
+    radarAx:{sys:"收縮壓", hr:"心率", glu:"血糖", temp:"體溫", sleep:"睡眠", mood:"情緒"},
+    critK:"評分項目對照",
+    crit:[["影響力","不必等地球回覆就能做醫療判斷；FHIR 交接給救援團隊。"],
+          ["創意","地端小型模型 + 可解釋規則 + 太空人參與決策。"],
+          ["可信度","真實 NASA OSDR RadLab 資料；模擬數值有標示；每個提醒都附規則。"],
+          ["關聯性","題目指定指標、NASA HRP 五大危害、月球/火星通訊延遲。"],
+          ["呈現","評審導覽、通訊中斷示範、中英雙語。"]],
+    flDev:"太空人裝置", flSea:"海 · 回收船", flAir:"空 · 醫療後送", flGnd:"陸 · 著陸點", flSim:"模擬 · 不會傳送",
+    linkLost:"通訊中斷（模擬）",
+    blackH:"通訊中斷：照常運作", blackP:"地球通訊已中斷（模擬）。規則、本機 AI 摘要與 FHIR 交接都在太空人裝置上執行。",
+    back:"上一步", next:"下一步", close:"關閉", done:"完成",
+    steps:[
+      ["問題","關聯性","火星在幾分鐘之外","到火星的單程訊號延遲可超過 20 分鐘，通訊也可能中斷。醫療判斷不能等地球。"],
+      ["解法","創意","地端 AI，太空人決定","規則與可選的本機小型模型都在太空人裝置上執行。按下地球通訊按鈕：斷線後一切照常運作。"],
+      ["證據","可信度","真實 NASA 輻射資料","NASA OSDR RadLab 的 ISS DosTel1 吸收劑量率（2022-03-19 至 04-01），與明確標示的模擬生理數值並列。"],
+      ["可解釋","可信度","每個提醒都附規則","不是黑盒子：每個提醒都列出觸發它的規則與數值。僅為決策輔助，不是診斷。"],
+      ["地端 AI","創意","本機 AI 摘要","只送到你設定的本機端點。若沒有模型回應，會改用規則式摘要，斷線也能用。"],
+      ["影響","影響力","FHIR 返航救援交接","一份標準 FHIR R4 Bundle，給海、空、陸救援團隊（模擬，不會傳送）。"]
+    ]
+  }
+};
+var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var v3 = { minThink: 1500, phase: 40, playing: !REDUCED, feedT: 1, feedHist: [], tickPrev: {}, tourI: -1, tourTargets: ["tile-problem","tile-solution","rad-panel","flags","ai-panel","fhir-panel"] };
+function $(id){ return document.getElementById(id); }
+
+function applyLang3(){
+  var t = T3[lang];
+  $("btn-tour").textContent = t.tour;
+  $("kbd-hint").innerHTML = t.kbd;
+  $("offline-banner").textContent = t.offline;
+  setLinkLabel();
+  ["s1k","s1c","s1h","s1note","s2k","s2c","s2h","s2p","s3k","s3c","s3h","s3note","s4k","s4c","s4h","s4p","s4note"].forEach(function(k){
+    var el = $(k.replace(/^s(\d)(\w+)$/, function(_,n,r){ return "s"+n+"-"+r; }));
+    if (el) el.textContent = t[k];
+  });
+  $("delay-unit").textContent = t.delayUnit;
+  $("phase-l").textContent = t.phase;
+  $("feed-note").textContent = t.feedNote;
+  $("proof-u").textContent = t.proofU;
+  $("btn-goto-fhir").textContent = t.s4btn;
+  $("radar-k").textContent = t.radarK;
+  $("radar-note").textContent = t.radarNote;
+  $("crit-k").textContent = t.critK;
+  $("crit-list").innerHTML = t.crit.map(function(c){ return "<li><b>"+c[0]+"</b><span>"+c[1]+"</span></li>"; }).join("");
+  $("fl-dev").textContent = t.flDev; $("fl-sea").textContent = t.flSea; $("fl-air").textContent = t.flAir; $("fl-gnd").textContent = t.flGnd; $("fl-sim").textContent = t.flSim;
+  $("tour-prev").textContent = t.back; $("tour-close").textContent = t.close;
+  if (v3.tourI >= 0) showTourStep(v3.tourI, true);
+}
+function setLinkLabel(){
+  var t = T3[lang];
+  $("link-label").textContent = document.body.classList.contains("offline") ? t.linkOff : t.linkOn;
+  $("btn-link").setAttribute("aria-pressed", document.body.classList.contains("offline"));
+}
+function setHdr(){ var hh = document.querySelector("header.app"); if (hh) document.documentElement.style.setProperty("--hdr", hh.getBoundingClientRect().height + "px"); }
+function toggleBlackout(force){
+  setHdr();
+  var on = (typeof force === "boolean") ? force : !document.body.classList.contains("offline");
+  document.body.classList.toggle("offline", on);
+  setLinkLabel();
+}
+
+// ---- number ticker ----
+function tickTo(el, key, to, decimals, prefix, suffix){
+  var from = (key in v3.tickPrev) ? v3.tickPrev[key] : 0;
+  v3.tickPrev[key] = to;
+  var fmt = function(v){ return (prefix||"") + v.toLocaleString("en-US", {minimumFractionDigits: decimals, maximumFractionDigits: decimals}) + (suffix||""); };
+  if (REDUCED || from === to){ el.textContent = fmt(to); return; }
+  var t0 = performance.now(), dur = 900;
+  function step(now){
+    var k = Math.min(1, (now - t0)/dur); k = 1 - Math.pow(1-k, 3);
+    el.textContent = fmt(from + (to-from)*k);
+    if (k < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function tickRibbon(){
+  document.querySelectorAll("#ribbon .v").forEach(function(el, i){
+    var m = el.textContent.match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/);
+    if (!m) return;
+    var num = parseFloat(m[2].replace(/,/g,""));
+    var dec = (m[2].split(".")[1] || "").length;
+    tickTo(el, "rib"+i, num, dec, m[1], m[3]);
+  });
+}
+
+// ---- canvas helpers ----
+function fitCanvas(c){
+  var r = c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  var w = Math.max(10, Math.round(r.width*dpr)), h = Math.max(10, Math.round(r.height*dpr));
+  if (c.width !== w || c.height !== h){ c.width = w; c.height = h; }
+  var ctx = c.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx: ctx, w: r.width, h: r.height};
+}
+function redraw(c){ if (REDUCED) return; c.classList.remove("draw"); void c.offsetWidth; c.classList.add("draw"); }
+
+// ---- orbit / signal delay ----
+var AU_LS = 499.005, AM = 1.524;
+function delayMinutes(deg){
+  var d = Math.sqrt(1 + AM*AM - 2*AM*Math.cos(deg*Math.PI/180));
+  return {au: d, min: d*AU_LS/60};
+}
+var orbitClock = 0;
+function drawOrbit(dt){
+  var c = $("orbit"); var f = fitCanvas(c), ctx = f.ctx, w = f.w, h = f.h;
+  ctx.clearRect(0,0,w,h);
+  var cx = w*0.42, cy = h/2, R = Math.min(w*0.40, h*0.46), rE = R/AM*1.0, rM = R;
+  orbitClock += dt;
+  var earthA = -orbitClock*0.25 - 0.6;
+  var marsA = earthA + v3.phase*Math.PI/180;
+  // orbits
+  ctx.lineWidth = 1; ctx.setLineDash([3,5]);
+  ctx.strokeStyle = "rgba(120,180,255,.35)"; ctx.beginPath(); ctx.arc(cx,cy,rE,0,Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = "rgba(224,122,95,.35)"; ctx.beginPath(); ctx.arc(cx,cy,rM,0,Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]);
+  // sun
+  var g = ctx.createRadialGradient(cx,cy,0,cx,cy,18); g.addColorStop(0,"#fff6c8"); g.addColorStop(.4,"#f5c04a"); g.addColorStop(1,"rgba(245,192,74,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill();
+  var ex = cx + rE*Math.cos(earthA), ey = cy + rE*Math.sin(earthA);
+  var mx = cx + rM*Math.cos(marsA), my = cy + rM*Math.sin(marsA);
+  var off = document.body.classList.contains("offline");
+  // link
+  ctx.lineWidth = 2; ctx.setLineDash(off ? [4,6] : []);
+  var lg = ctx.createLinearGradient(ex,ey,mx,my); lg.addColorStop(0, off ? "#e07a5f" : "#6fb6ff"); lg.addColorStop(1, off ? "#e07a5f" : "#3cb8b0");
+  ctx.strokeStyle = lg; ctx.globalAlpha = off ? .7 : .85; ctx.beginPath(); ctx.moveTo(ex,ey); ctx.lineTo(mx,my); ctx.stroke(); ctx.globalAlpha = 1; ctx.setLineDash([]);
+  if (!off){
+    // packets travel; visual speed slows as delay grows
+    var dm = delayMinutes(v3.phase).min;
+    var period = 1.2 + dm/6;
+    for (var i=0;i<3;i++){
+      var k = ((orbitClock/period) + i/3) % 1;
+      var px = ex + (mx-ex)*k, py = ey + (my-ey)*k;
+      ctx.fillStyle = "rgba(158,224,216,"+(1-k*0.5)+")"; ctx.beginPath(); ctx.arc(px,py,3.2,0,Math.PI*2); ctx.fill();
+    }
+  } else {
+    ctx.fillStyle = "#ffb4a2"; ctx.font = "700 12px Segoe UI, Noto Sans, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(T3[lang].linkLost, (ex+mx)/2, (ey+my)/2 - 8);
+  }
+  // planets
+  function planet(x,y,r,c1,c2,label){
+    var pg = ctx.createRadialGradient(x-r/3,y-r/3,1,x,y,r); pg.addColorStop(0,c1); pg.addColorStop(1,c2);
+    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = "#cfe3e5"; ctx.font = "600 11px Segoe UI, Noto Sans, sans-serif"; ctx.textAlign = "center"; ctx.fillText(label, x, y - r - 5);
+  }
+  planet(ex,ey,7,"#bfe3ff","#2a6fd6", lang==="zh"?"地球":"Earth");
+  planet(mx,my,6,"#ffd0b8","#b8452a", lang==="zh"?"火星（太空人）":"Mars (crew)");
+  // readout
+  var d = delayMinutes(v3.phase);
+  $("delay-min").textContent = "≈" + d.min.toFixed(1);
+  ctx.fillStyle = "#9bb4b8"; ctx.font = "11px Segoe UI, Noto Sans, sans-serif"; ctx.textAlign = "left";
+  ctx.fillText(d.au.toFixed(2) + " AU · " + (lang==="zh" ? "往返 ≈ " : "round trip ≈ ") + (d.min*2).toFixed(0) + (lang==="zh" ? " 分鐘" : " min"), 8, h - 8);
+}
+
+// ---- simulated live feed (replay of session, linear interpolation) ----
+function interp(key, t){
+  var maxD = Math.max.apply(null, rows.map(function(r){return r.day;}));
+  var minD = Math.min.apply(null, rows.map(function(r){return r.day;}));
+  var tt = minD + ((t - minD) % (maxD - minD + 1e-9));
+  var a = Math.floor(tt), b = Math.min(maxD, a+1), k = tt - a;
+  var ra = rows.find(function(r){return r.day===a;}) || rows[0], rb = rows.find(function(r){return r.day===b;}) || ra;
+  return ra[key] + (rb[key]-ra[key])*k;
+}
+function drawFeed(dt){
+  v3.feedT += dt*0.5; // 1 session day per 2 s
+  var hr = interp("hr", v3.feedT), sys = interp("sys", v3.feedT), dia = interp("dia", v3.feedT), sl = interp("sleep", v3.feedT);
+  v3.feedHist.push(hr); if (v3.feedHist.length > 160) v3.feedHist.shift();
+  $("feed-hr").textContent = hr.toFixed(0);
+  $("feed-bp").textContent = sys.toFixed(0) + "/" + dia.toFixed(0);
+  $("feed-sl").textContent = sl.toFixed(1);
+  var f = fitCanvas($("feed-canvas")), ctx = f.ctx, w = f.w, h = f.h;
+  ctx.clearRect(0,0,w,h);
+  var hs = rows.map(function(r){return r.hr;}), lo = Math.min.apply(null,hs)-3, hi = Math.max.apply(null,hs)+3;
+  ctx.strokeStyle = "#3cb8b0"; ctx.lineWidth = 2; ctx.beginPath();
+  v3.feedHist.forEach(function(v,i){ var x = w - (v3.feedHist.length-1-i)*(w/159); var y = h - (v-lo)/(hi-lo)*(h-6) - 3; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+  ctx.stroke();
+  var last = v3.feedHist[v3.feedHist.length-1];
+  ctx.fillStyle = "#e8f3f4"; ctx.beginPath(); ctx.arc(w-2, h - (last-lo)/(hi-lo)*(h-6) - 3, 3, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#9bb4b8"; ctx.font = "10px Segoe UI, Noto Sans, sans-serif"; ctx.textAlign = "left";
+  ctx.fillText((lang==="zh"?"重播 第 ":"replay day ") + (Math.floor(((v3.feedT-1) % 14))+1), 4, 11);
+}
+
+// ---- proof sparkline + radar ----
+function drawProof(){
+  var c = $("proof-spark"); var f = fitCanvas(c), ctx = f.ctx, w = f.w, h = f.h;
+  ctx.clearRect(0,0,w,h);
+  var v = RADIATION_DAILY.map(function(x){return x.median_uGy_per_h;});
+  var lo = Math.min.apply(null,v), hi = Math.max.apply(null,v), pad = (hi-lo)||1;
+  var grad = ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0,"rgba(224,177,74,.35)"); grad.addColorStop(1,"rgba(224,177,74,0)");
+  ctx.beginPath();
+  v.forEach(function(y,i){ var x = i*(w-6)/(v.length-1)+3, yy = h-4-(y-lo)/pad*(h-12); if(i===0) ctx.moveTo(x,yy); else ctx.lineTo(x,yy); });
+  ctx.strokeStyle = "#e0b14a"; ctx.lineWidth = 2; ctx.stroke();
+  ctx.lineTo(w-3,h); ctx.lineTo(3,h); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+  var idx = RADIATION_DAILY.findIndex(function(x){return x.demo_day===day;});
+  if (idx>=0){ var x = idx*(w-6)/(v.length-1)+3, yy = h-4-(v[idx]-lo)/pad*(h-12); ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(x,yy,3.5,0,Math.PI*2); ctx.fill(); }
+}
+function drawRadar(){
+  var c = $("radar"); var f = fitCanvas(c), ctx = f.ctx, w = f.w, h = f.h;
+  ctx.clearRect(0,0,w,h);
+  var keys = ["sys","hr","glu","temp","sleep","mood"], row = currentRow(), fl = flagsFor(row);
+  var flagKey = {sleepLow:"sleep", moodLow:"mood", hrUp:"hr", sysUp:"sys", gluShift:"glu", tempHigh:"temp"};
+  var flagged = {}; fl.forEach(function(id){ flagged[flagKey[id]] = true; });
+  var cx = w/2, cy = h/2 + 4, R = Math.min(w, h)/2 - 26;
+  var rOf = function(ratio){ var r = Math.max(0.5, Math.min(1.5, ratio)); return R*(r-0.5); }; // 0.5→0, 1.0→R/2, 1.5→R
+  ctx.strokeStyle = "rgba(120,220,210,.15)"; ctx.lineWidth = 1;
+  [0.25,0.5,0.75,1].forEach(function(q){ ctx.beginPath(); keys.forEach(function(k,i){ var a=-Math.PI/2+i*2*Math.PI/keys.length; var x=cx+R*q*Math.cos(a), y=cy+R*q*Math.sin(a); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }); ctx.closePath(); ctx.stroke(); });
+  ctx.setLineDash([4,4]); ctx.strokeStyle = "rgba(240,212,138,.7)"; ctx.beginPath(); ctx.arc(cx,cy,R/2,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+  var pts = keys.map(function(k,i){ var a=-Math.PI/2+i*2*Math.PI/keys.length; var r=rOf(row[k]/meanEarly(k)); return [cx+r*Math.cos(a), cy+r*Math.sin(a), a, k]; });
+  ctx.beginPath(); pts.forEach(function(p,i){ if(i===0) ctx.moveTo(p[0],p[1]); else ctx.lineTo(p[0],p[1]); }); ctx.closePath();
+  ctx.fillStyle = "rgba(60,184,176,.28)"; ctx.fill(); ctx.strokeStyle = "#3cb8b0"; ctx.lineWidth = 2; ctx.stroke();
+  var ax = T3[lang].radarAx;
+  pts.forEach(function(p){
+    ctx.fillStyle = flagged[p[3]] ? "#e07a5f" : "#9ee0d8"; ctx.beginPath(); ctx.arc(p[0],p[1], flagged[p[3]]?4.5:3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = "#cfe3e5"; ctx.font = "600 10.5px Segoe UI, Noto Sans, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(ax[p[3]], cx+(R+14)*Math.cos(p[2]), cy+(R+14)*Math.sin(p[2])+4);
+  });
+}
+function renderV3(){
+  if (!V3READY) return;
+  drawRadar(); drawProof(); tickRibbon();
+  var total = RADIATION_DAILY.reduce(function(a,r){ return a + r.n_samples; }, 0);
+  tickTo($("proof-n"), "proof", total, 0);
+}
+
+// ---- animation loop ----
+var lastTs = 0, visible = true;
+document.addEventListener("visibilitychange", function(){ visible = !document.hidden; });
+function loop(ts){
+  var dt = lastTs ? Math.min(0.1, (ts-lastTs)/1000) : 0; lastTs = ts;
+  if (visible){
+    if (v3.playing){ v3.phase = (v3.phase + dt*9) % 360; $("phase").value = Math.round(v3.phase); }
+    drawOrbit(v3.playing ? dt : 0);
+    drawFeed(REDUCED ? 0 : dt);
+  }
+  requestAnimationFrame(loop);
+}
+
+// ---- judge tour ----
+function placeTour(){
+  if (v3.tourI < 0) return;
+  var el = $(v3.tourTargets[v3.tourI]); if (!el) return;
+  var r = el.getBoundingClientRect(), pad = 8;
+  var ring = $("tour-ring"), card = $("tour-card");
+  ring.style.display = "block";
+  ring.style.left = (r.left-pad)+"px"; ring.style.top = (r.top-pad)+"px"; ring.style.width = (r.width+pad*2)+"px"; ring.style.height = (r.height+pad*2)+"px";
+  card.style.display = "block";
+  var cw = card.offsetWidth, ch = card.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+  var top = r.bottom + 16; if (top + ch > vh - 8) top = r.top - ch - 16; if (top < 8) top = Math.max(8, vh - ch - 12);
+  var left = Math.min(Math.max(8, r.left), vw - cw - 8);
+  card.style.top = top+"px"; card.style.left = left+"px";
+}
+function showTourStep(i, noScroll){
+  var t = T3[lang], s = t.steps[i]; v3.tourI = i;
+  $("tour-step").textContent = (i+1) + "/" + t.steps.length + " · " + s[0];
+  $("tour-crit").textContent = s[1];
+  $("tour-h").textContent = s[2];
+  $("tour-p").textContent = s[3];
+  $("tour-bar").style.width = ((i+1)/t.steps.length*100) + "%";
+  $("tour-prev").disabled = i === 0;
+  $("tour-next").textContent = i === t.steps.length-1 ? t.done : t.next;
+  var el = $(v3.tourTargets[i]);
+  if (!noScroll && el) el.scrollIntoView({behavior: REDUCED ? "auto" : "smooth", block: "center"});
+  if (v3.tourTargets[i] === "rad-panel") redraw($("rad-chart"));
+  if (v3.tourTargets[i] === "fhir-panel" && !lastBundle) $("btn-fhir").click();
+  setTimeout(placeTour, REDUCED ? 0 : 650);
+  placeTour();
+}
+function startTour(){ showTourStep(0); }
+function endTour(){ v3.tourI = -1; $("tour-ring").style.display = "none"; $("tour-card").style.display = "none"; }
+window.addEventListener("scroll", function(){ if (v3.tourI >= 0) placeTour(); }, {passive: true});
+window.addEventListener("resize", function(){ if (v3.tourI >= 0) placeTour(); renderV3(); });
+
+// ---- wiring ----
+$("btn-tour").addEventListener("click", startTour);
+$("tour-next").addEventListener("click", function(){ if (v3.tourI >= T3[lang].steps.length-1) endTour(); else showTourStep(v3.tourI+1); });
+$("tour-prev").addEventListener("click", function(){ if (v3.tourI > 0) showTourStep(v3.tourI-1); });
+$("tour-close").addEventListener("click", endTour);
+$("btn-link").addEventListener("click", function(){ toggleBlackout(); });
+$("phase").addEventListener("input", function(e){ v3.phase = +e.target.value; v3.playing = false; $("orbit-play").textContent = "▶"; $("orbit-play").setAttribute("aria-pressed","false"); });
+$("orbit-play").addEventListener("click", function(){ v3.playing = !v3.playing; this.textContent = v3.playing ? "❚❚" : "▶"; this.setAttribute("aria-pressed", v3.playing); });
+$("btn-goto-fhir").addEventListener("click", function(){ $("fhir-panel").scrollIntoView({behavior: REDUCED?"auto":"smooth", block:"center"}); if (!lastBundle) $("btn-fhir").click(); });
+$("btn-fhir").addEventListener("click", function(){ $("fhir-flow").classList.add("live"); });
+document.querySelectorAll(".bento .tile").forEach(function(tl){ tl.addEventListener("pointermove", function(e){ var r = tl.getBoundingClientRect(); tl.style.setProperty("--mx", ((e.clientX-r.left)/r.width*100)+"%"); }); });
+// AI thinking shimmer wraps the existing request (same function, same behavior)
+$("btn-ai").onclick = function(){
+  var panel = $("ai-panel"); panel.classList.add("thinking");
+  var t0 = Date.now();
+  Promise.resolve(requestAiSummary()).finally(function(){ var wait = Math.max(0, v3.minThink - (Date.now()-t0)); setTimeout(function(){ panel.classList.remove("thinking"); }, wait); });
+};
+document.addEventListener("keydown", function(e){
+  var tag = (e.target && e.target.tagName) || "";
+  if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft"){
+    var mx = Math.max.apply(null, rows.map(function(r){return r.day;})), mn = Math.min.apply(null, rows.map(function(r){return r.day;}));
+    day = Math.max(mn, Math.min(mx, day + (e.key === "ArrowRight" ? 1 : -1))); $("day").value = day; render();
+  } else if (e.key === "b" || e.key === "B"){ toggleBlackout(); }
+  else if (e.key === "t" || e.key === "T"){ startTour(); }
+  else if (e.key === "Escape"){ endTour(); }
+});
+
+// ---- starfield (drawn once; static) ----
+function drawStars(){
+  var c = $("stars"), dpr = Math.min(2, window.devicePixelRatio||1);
+  c.width = innerWidth*dpr; c.height = innerHeight*dpr;
+  var ctx = c.getContext("2d"); ctx.scale(dpr,dpr);
+  var seed = 7; function rnd(){ seed = (seed*16807) % 2147483647; return seed/2147483647; }
+  for (var i=0;i<220;i++){ ctx.fillStyle = "rgba(220,240,255,"+(0.15+rnd()*0.55)+")"; ctx.beginPath(); ctx.arc(rnd()*innerWidth, rnd()*innerHeight, rnd()*1.2+0.2, 0, Math.PI*2); ctx.fill(); }
+}
+drawStars(); window.addEventListener("resize", drawStars);
+
+// ---- init ----
+(function initV3(){
+  var q = new URLSearchParams(location.search);
+  if (q.get("lang") === "zh" && lang !== "zh"){ $("lang-zh").click(); }
+  if (q.get("day")){ var d = parseInt(q.get("day"),10); if (d>=1 && d<=14){ day = d; $("day").value = d; } }
+  V3READY = true;
+  applyLang3();
+  render();
+  document.querySelectorAll(".chart-box canvas, #rad-chart, #proof-spark").forEach(redraw);
+  requestAnimationFrame(loop);
+  if (q.get("tour") === "1") setTimeout(startTour, 1200);
+  if (q.get("demo") === "1") runDemo();
+})();
+
+// ---- scripted demo for screen recording: ?demo=1 (≈29.6 s) ----
+function runDemo(){
+  var at = function(sec, fn){ setTimeout(fn, sec*1000); };
+  document.documentElement.style.scrollBehavior = "smooth";
+  window.scrollTo(0,0);
+  v3.playing = true; v3.minThink = 2600;
+  at(2.5, function(){ showTourStep(0); });                  // hero + orbit delay
+  at(7.4, function(){ showTourStep(2); });                  // RadLab panel (chart draws in)
+  at(12.0, function(){ showTourStep(3); });                 // flags with rule text
+  at(14.6, function(){ showTourStep(4); setTimeout(function(){ $("btn-ai").click(); }, 500); }); // local AI shimmer -> summary
+  at(17.6, function(){ toggleBlackout(true); $("tour-h").textContent = T3[lang].blackH; $("tour-p").textContent = T3[lang].blackP; placeTour(); }); // comms blackout banner
+  at(20.2, function(){ showTourStep(5); });                 // FHIR handoff flow (builds bundle, packets flow)
+  at(29.6, function(){ endTour(); });
+}
 </script>
 </body>
 </html>

@@ -18,6 +18,17 @@ This is a decision-support demo, not a medical device. It does not diagnose, tre
 - Official NASA HRP hazard short descriptions and challenge-listed partner pages, quoted with links.
 - Optional CSV import of another local simulated session (`data/sample-session.csv`).
 
+## What's new (v3)
+
+- **60-second story for judges:** a bento-grid first screen reading 01 Problem (Earth–Mars signal delay), 02 Solution (on-device AI for crew medical review), 03 Proof (real NASA OSDR RadLab ISS DosTel1 data, 16,802 readings), 04 Impact (FHIR recovery handoff). Each tile is tagged with the judging criterion it addresses, and a judging-criteria map follows.
+- **Judge quick tour:** a guided 6-step spotlight walkthrough (button or `T` key; `?tour=1` opens it on load).
+- **Signal delay orbit:** animated Earth–Mars view with a phase slider. The one-way light time is computed in the page from circular orbits (1.000 and 1.524 AU, 1 AU ≈ 499 light-seconds). It is illustrative, not today's planet positions; the real range is about 3–22 min.
+- **Comms blackout toggle** (`B` key): a simulated loss of the Earth link. Rules, the local AI summary and the FHIR handoff keep working.
+- **Simulated live feed:** replays the 14-day demo session with straight-line interpolation between days. It is not a sensor and not NASA data.
+- **Crew health radar:** today's six indicators as a ratio to the crew member's own days 1–3 average (simulated session).
+- **Motion:** aurora background, starfield, number tickers, charts that draw in, an AI "thinking" shimmer while the local summary runs, and animated FHIR packets to sea, air and ground (simulated, nothing is sent). `prefers-reduced-motion` is respected.
+- **Scripted demo for screen recording:** `index.html?demo=1` (optional `&lang=zh`, `&day=N`) plays a timed ~30 s walkthrough.
+
 ## What's new (v2)
 
 - **On-device AI, crew medical focus.** A header panel states the two themes: health review runs on the crew's own device, and the optional Local AI Summary goes only to a local endpoint the user sets (default `localhost`). If no local model answers, a rule-based summary is shown instead, so the page still works with no link to Earth. Mars one-way signal delay can exceed 20 minutes, which is why decisions cannot wait for Earth.
