@@ -1,0 +1,156 @@
+[
+  {
+    "demo_day": 1,
+    "utc_date": "2022-03-19",
+    "n_samples": 1207,
+    "mean_uGy_per_h": 30.163729,
+    "median_uGy_per_h": 5.308357,
+    "min_uGy_per_h": 1.461794,
+    "max_uGy_per_h": 765.559017,
+    "first_timestamp": "2022-03-19T00:00:00",
+    "last_timestamp": "2022-03-19T23:59:04"
+  },
+  {
+    "demo_day": 2,
+    "utc_date": "2022-03-20",
+    "n_samples": 1191,
+    "mean_uGy_per_h": 30.768041,
+    "median_uGy_per_h": 5.197051,
+    "min_uGy_per_h": 1.331594,
+    "max_uGy_per_h": 742.01485,
+    "first_timestamp": "2022-03-20T00:00:00",
+    "last_timestamp": "2022-03-20T23:58:41"
+  },
+  {
+    "demo_day": 3,
+    "utc_date": "2022-03-21",
+    "n_samples": 1201,
+    "mean_uGy_per_h": 32.015442,
+    "median_uGy_per_h": 5.278174,
+    "min_uGy_per_h": 1.40245,
+    "max_uGy_per_h": 607.106466,
+    "first_timestamp": "2022-03-21T00:00:00",
+    "last_timestamp": "2022-03-21T23:58:42"
+  },
+  {
+    "demo_day": 4,
+    "utc_date": "2022-03-22",
+    "n_samples": 1200,
+    "mean_uGy_per_h": 31.887642,
+    "median_uGy_per_h": 5.210995,
+    "min_uGy_per_h": 1.376797,
+    "max_uGy_per_h": 698.035861,
+    "first_timestamp": "2022-03-22T00:00:00",
+    "last_timestamp": "2022-03-22T23:59:10"
+  },
+  {
+    "demo_day": 5,
+    "utc_date": "2022-03-23",
+    "n_samples": 1204,
+    "mean_uGy_per_h": 30.189952,
+    "median_uGy_per_h": 5.264499,
+    "min_uGy_per_h": 1.442631,
+    "max_uGy_per_h": 748.611003,
+    "first_timestamp": "2022-03-23T00:00:00",
+    "last_timestamp": "2022-03-23T23:58:35"
+  },
+  {
+    "demo_day": 6,
+    "utc_date": "2022-03-24",
+    "n_samples": 1206,
+    "mean_uGy_per_h": 31.034356,
+    "median_uGy_per_h": 5.185313,
+    "min_uGy_per_h": 1.357788,
+    "max_uGy_per_h": 763.490113,
+    "first_timestamp": "2022-03-24T00:00:00",
+    "last_timestamp": "2022-03-24T23:59:28"
+  },
+  {
+    "demo_day": 7,
+    "utc_date": "2022-03-25",
+    "n_samples": 1199,
+    "mean_uGy_per_h": 31.608935,
+    "median_uGy_per_h": 5.265023,
+    "min_uGy_per_h": 1.517119,
+    "max_uGy_per_h": 616.827418,
+    "first_timestamp": "2022-03-25T00:00:00",
+    "last_timestamp": "2022-03-25T23:59:38"
+  },
+  {
+    "demo_day": 8,
+    "utc_date": "2022-03-26",
+    "n_samples": 1198,
+    "mean_uGy_per_h": 32.147604,
+    "median_uGy_per_h": 5.175938,
+    "min_uGy_per_h": 1.429727,
+    "max_uGy_per_h": 715.492312,
+    "first_timestamp": "2022-03-26T00:00:00",
+    "last_timestamp": "2022-03-26T23:58:22"
+  },
+  {
+    "demo_day": 9,
+    "utc_date": "2022-03-27",
+    "n_samples": 1205,
+    "mean_uGy_per_h": 30.626877,
+    "median_uGy_per_h": 5.271513,
+    "min_uGy_per_h": 1.360261,
+    "max_uGy_per_h": 797.630314,
+    "first_timestamp": "2022-03-27T00:00:00",
+    "last_timestamp": "2022-03-27T23:59:32"
+  },
+  {
+    "demo_day": 10,
+    "utc_date": "2022-03-28",
+    "n_samples": 1205,
+    "mean_uGy_per_h": 30.078484,
+    "median_uGy_per_h": 5.206916,
+    "min_uGy_per_h": 1.41095,
+    "max_uGy_per_h": 735.223204,
+    "first_timestamp": "2022-03-28T00:00:00",
+    "last_timestamp": "2022-03-28T23:58:33"
+  },
+  {
+    "demo_day": 11,
+    "utc_date": "2022-03-29",
+    "n_samples": 1199,
+    "mean_uGy_per_h": 31.657153,
+    "median_uGy_per_h": 5.138188,
+    "min_uGy_per_h": 1.412573,
+    "max_uGy_per_h": 610.939444,
+    "first_timestamp": "2022-03-29T00:00:00",
+    "last_timestamp": "2022-03-29T23:57:04"
+  },
+  {
+    "demo_day": 12,
+    "utc_date": "2022-03-30",
+    "n_samples": 1197,
+    "mean_uGy_per_h": 31.827143,
+    "median_uGy_per_h": 5.078957,
+    "min_uGy_per_h": 1.403378,
+    "max_uGy_per_h": 732.801176,
+    "first_timestamp": "2022-03-30T00:00:00",
+    "last_timestamp": "2022-03-30T23:57:08"
+  },
+  {
+    "demo_day": 13,
+    "utc_date": "2022-03-31",
+    "n_samples": 1198,
+    "mean_uGy_per_h": 30.294998,
+    "median_uGy_per_h": 5.004005,
+    "min_uGy_per_h": 1.333526,
+    "max_uGy_per_h": 781.301619,
+    "first_timestamp": "2022-03-31T00:00:00",
+    "last_timestamp": "2022-03-31T23:58:30"
+  },
+  {
+    "demo_day": 14,
+    "utc_date": "2022-04-01",
+    "n_samples": 1192,
+    "mean_uGy_per_h": 30.561565,
+    "median_uGy_per_h": 5.255892,
+    "min_uGy_per_h": 1.425631,
+    "max_uGy_per_h": 731.333047,
+    "first_timestamp": "2022-04-01T00:00:00",
+    "last_timestamp": "2022-04-01T23:58:23"
+  }
+]

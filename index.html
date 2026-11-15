@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calm Signal — Crew Health Review</title>
+  <style>
+    :root {
+      --bg: #07131a;
+      --bg2: #0c1e27;
+      --card: #102630;
+      --line: #1e4450;
+      --ink: #e8f3f4;
+      --muted: #9bb4b8;
+      --teal: #3cb8b0;
+      --teal2: #1f8a85;
+      --ok: #3cb87a;
+      --watch: #e0b14a;
+      --alert: #e07a5f;
+      --chip: #16343c;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink);
+      font: 15px/1.5 "Segoe UI", "Noto Sans CJK TC", "Noto Sans", sans-serif; }
+    a { color: var(--teal); }
+    header.app {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      padding: 14px 20px; background: linear-gradient(90deg, #0a2a30, #0c1e27);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo { font-weight: 700; font-size: 20px; letter-spacing: .04em; color: #fff; }
+    .logo span { color: var(--teal); font-weight: 600; margin-left: 8px; font-size: 14px; }
+    .grow { flex: 1; }
+    button, select, input[type=file] {
+      background: var(--chip); color: var(--ink); border: 1px solid var(--line);
+      border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit;
+    }
+    button.primary { background: var(--teal2); border-color: var(--teal); color: #fff; }
+    button:hover { filter: brightness(1.1); }
+    .lang { display: flex; gap: 4px; }
+    .lang button[aria-pressed="true"] { background: var(--teal2); color: #fff; }
+    .disclaimer {
+      margin: 0; padding: 10px 20px; background: #3a2a10; color: #f3e2b8;
+      border-bottom: 1px solid #6a5420; font-size: 13px; line-height: 1.45;
+    }
+    .source-bar {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      padding: 8px 20px; background: var(--bg2); border-bottom: 1px solid var(--line);
+      font-size: 13px; color: var(--muted);
+    }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+    .badge.sim { background: #4a3a12; color: #f0d48a; }
+    .badge.off { background: #143a36; color: #9ee0d8; }
+    main { display: grid; grid-template-columns: 280px 1fr 320px; gap: 16px; padding: 16px 20px 28px; }
+    @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+    section.card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 16px;
+    }
+    h2 { margin: 0 0 10px; font-size: 15px; color: var(--teal); letter-spacing: .06em; text-transform: uppercase; }
+    h3 { margin: 12px 0 6px; font-size: 14px; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .metric { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+    .metric .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .metric .v { font-size: 20px; font-weight: 700; line-height: 1.15; }
+    .metric .u { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .metric.ok { box-shadow: inset 3px 0 var(--ok); }
+    .metric.watch { box-shadow: inset 3px 0 var(--watch); }
+    .metric.flag { box-shadow: inset 3px 0 var(--alert); }
+    .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+    .chart-box { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
+    .chart-box canvas { width: 100%; height: 110px; display: block; }
+    .flags { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .flags li { background: #2a1814; border: 1px solid #6a3a30; border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+    .flags li.none { background: #142a1c; border-color: #2a5a3a; color: #b7e0c4; }
+    .hazard { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: var(--bg2); cursor: pointer; }
+    .hazard h3 { margin: 0 0 4px; color: var(--teal); font-size: 13px; text-transform: none; }
+    .hazard p { margin: 0; font-size: 12.5px; color: var(--muted); }
+    .hazard.active { border-color: var(--teal); background: #16343c; }
+    .metric.focus { box-shadow: inset 0 0 0 1px var(--teal); }
+    .bodywrap { display: flex; justify-content: center; padding: 6px 0 10px; }
+    .bodywrap svg { width: 140px; height: 260px; }
+    .bodywrap .hit { fill: #1a4a50; stroke: var(--teal); stroke-width: 2; cursor: pointer; }
+    .bodywrap .hit:hover, .bodywrap .hit.on { fill: #2a7a74; }
+    .actions { display: flex; flex-direction: column; gap: 6px; }
+    .actions button { text-align: left; }
+    .log { max-height: 160px; overflow: auto; font-size: 12.5px; color: var(--muted); }
+    .log div { border-top: 1px dashed var(--line); padding: 4px 0; }
+    footer { padding: 8px 20px 20px; color: var(--muted); font-size: 12px; }
+    .day-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    input[type=range] { flex: 1; }
+
+    .field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 0; }
+    .field input[type=text] { width: 100%; }
+    .ai-box { margin-top: 10px; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .ai-box .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .03em; margin-bottom: 8px; }
+    .ai-box.mode-ai .tag { background: #1a3a4a; color: #9ee0d8; }
+    .ai-box.mode-fallback .tag { background: #4a3a12; color: #f0d48a; }
+    .ai-box .body { font-size: 13.5px; line-height: 1.45; margin: 0 0 8px; white-space: pre-wrap; }
+    .ai-box ul { margin: 0; padding-left: 18px; font-size: 13px; }
+    .ai-box li { margin: 3px 0; }
+    #ai-status { font-size: 12.5px; color: var(--muted); margin-top: 6px; min-height: 1.2em; }
+
+    .rad-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+    .rad-stats .metric .v { font-size: 18px; }
+    #rad-chart { width: 100%; height: 120px; display: block; background: var(--bg2); border-radius: 8px; }
+    #btn-ai { width: 100%; margin-top: 8px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header class="app">
+    <div class="logo">Calm Signal<span id="t-sub">Crew Health Review</span></div>
+    <div class="grow"></div>
+    <label class="muted" id="t-env">Environment</label>
+    <select id="env"></select>
+    <div class="lang">
+      <button type="button" id="lang-en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-zh" aria-pressed="false">中文</button>
+    </div>
+  </header>
+  <p class="disclaimer" id="disclaimer"></p>
+  <div class="source-bar">
+    <span class="badge sim" id="badge-sim">SIMULATED SESSION</span>
+    <span id="source-note"></span>
+  </div>
+  <main>
+    <div>
+      <section class="card">
+        <h2 id="t-today">Selected day</h2>
+        <div class="day-row">
+          <span id="day-label">Day 1</span>
+          <input type="range" id="day" min="1" max="14" value="8">
+        </div>
+        <div class="metrics" id="metrics"></div>
+        <p class="muted" id="flag-help" style="margin-top:10px"></p>
+      </section>
+      <section class="card">
+        <h2 id="t-body">Indicator map</h2>
+        <div class="bodywrap" id="body"></div>
+        <p class="muted" id="body-note"></p>
+      </section>
+      <section class="card">
+        <h2 id="t-import">Load another session</h2>
+        <input type="file" id="file" accept=".csv,text/csv">
+        <button type="button" id="reset" style="margin-top:8px;width:100%">Reload demo session</button>
+        <p class="muted" id="import-help"></p>
+      </section>
+    </div>
+    <div>
+      <section class="card">
+        <h2 id="t-trends">Trends in this session</h2>
+        <div class="charts" id="charts"></div>
+      </section>
+      <section class="card" id="rad-panel">
+        <h2 id="t-rad">Mission radiation exposure</h2>
+        <p class="muted" id="rad-help"></p>
+        <div class="rad-stats" id="rad-stats"></div>
+        <canvas id="rad-chart" width="640" height="120" aria-label="ISS DosTel1 daily absorbed dose rate"></canvas>
+        <p class="muted" id="rad-cite"></p>
+      </section>
+      <section class="card">
+        <h2 id="t-flags">Needs a closer look</h2>
+        <ul class="flags" id="flags"></ul>
+      </section>
+      <section class="card" id="ai-panel">
+        <h2 id="t-ai">Local AI Summary</h2>
+        <p class="muted" id="ai-help"></p>
+        <div class="field">
+          <label class="muted" id="t-endpoint" for="ai-endpoint">Local endpoint</label>
+          <input type="text" id="ai-endpoint" value="http://localhost:11434/v1" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="muted" id="t-model" for="ai-model">Model name (optional)</label>
+          <input type="text" id="ai-model" value="" placeholder="local-model" autocomplete="off" spellcheck="false">
+        </div>
+        <button type="button" class="primary" id="btn-ai">Local AI Summary</button>
+        <p id="ai-status"></p>
+        <div class="ai-box hidden" id="ai-result" aria-live="polite">
+          <div class="tag" id="ai-tag"></div>
+          <p class="body" id="ai-text"></p>
+          <p class="muted" id="ai-sourced"></p>
+          <ul id="ai-options"></ul>
+        </div>
+      </section>
+    </div>
+    <div>
+      <section class="card">
+        <h2 id="t-decide">Crew decision</h2>
+        <p class="muted" id="decide-help"></p>
+        <div class="actions" id="actions"></div>
+        <h3 id="t-log">Decision log (this device only)</h3>
+        <div class="log" id="log"></div>
+      </section>
+      <section class="card">
+        <h2 id="t-hazards">Five hazards (NASA HRP)</h2>
+        <p class="muted" id="hazard-intro"></p>
+        <div id="hazards"></div>
+        <p class="muted" id="hazard-src"></p>
+      </section>
+      <section class="card">
+        <h2 id="t-partners">Partner resources</h2>
+        <div id="partners" class="muted"></div>
+      </section>
+    </div>
+  </main>
+  <footer id="footer"></footer>
+  <script>
+/* All session numbers below are simulated for the demo. They are not NASA data. */
+const RADIATION_DAILY = [{"demo_day": 1, "utc_date": "2022-03-19", "n_samples": 1207, "mean_uGy_per_h": 30.163729, "median_uGy_per_h": 5.308357, "min_uGy_per_h": 1.461794, "max_uGy_per_h": 765.559017, "first_timestamp": "2022-03-19T00:00:00", "last_timestamp": "2022-03-19T23:59:04"}, {"demo_day": 2, "utc_date": "2022-03-20", "n_samples": 1191, "mean_uGy_per_h": 30.768041, "median_uGy_per_h": 5.197051, "min_uGy_per_h": 1.331594, "max_uGy_per_h": 742.01485, "first_timestamp": "2022-03-20T00:00:00", "last_timestamp": "2022-03-20T23:58:41"}, {"demo_day": 3, "utc_date": "2022-03-21", "n_samples": 1201, "mean_uGy_per_h": 32.015442, "median_uGy_per_h": 5.278174, "min_uGy_per_h": 1.40245, "max_uGy_per_h": 607.106466, "first_timestamp": "2022-03-21T00:00:00", "last_timestamp": "2022-03-21T23:58:42"}, {"demo_day": 4, "utc_date": "2022-03-22", "n_samples": 1200, "mean_uGy_per_h": 31.887642, "median_uGy_per_h": 5.210995, "min_uGy_per_h": 1.376797, "max_uGy_per_h": 698.035861, "first_timestamp": "2022-03-22T00:00:00", "last_timestamp": "2022-03-22T23:59:10"}, {"demo_day": 5, "utc_date": "2022-03-23", "n_samples": 1204, "mean_uGy_per_h": 30.189952, "median_uGy_per_h": 5.264499, "min_uGy_per_h": 1.442631, "max_uGy_per_h": 748.611003, "first_timestamp": "2022-03-23T00:00:00", "last_timestamp": "2022-03-23T23:58:35"}, {"demo_day": 6, "utc_date": "2022-03-24", "n_samples": 1206, "mean_uGy_per_h": 31.034356, "median_uGy_per_h": 5.185313, "min_uGy_per_h": 1.357788, "max_uGy_per_h": 763.490113, "first_timestamp": "2022-03-24T00:00:00", "last_timestamp": "2022-03-24T23:59:28"}, {"demo_day": 7, "utc_date": "2022-03-25", "n_samples": 1199, "mean_uGy_per_h": 31.608935, "median_uGy_per_h": 5.265023, "min_uGy_per_h": 1.517119, "max_uGy_per_h": 616.827418, "first_timestamp": "2022-03-25T00:00:00", "last_timestamp": "2022-03-25T23:59:38"}, {"demo_day": 8, "utc_date": "2022-03-26", "n_samples": 1198, "mean_uGy_per_h": 32.147604, "median_uGy_per_h": 5.175938, "min_uGy_per_h": 1.429727, "max_uGy_per_h": 715.492312, "first_timestamp": "2022-03-26T00:00:00", "last_timestamp": "2022-03-26T23:58:22"}, {"demo_day": 9, "utc_date": "2022-03-27", "n_samples": 1205, "mean_uGy_per_h": 30.626877, "median_uGy_per_h": 5.271513, "min_uGy_per_h": 1.360261, "max_uGy_per_h": 797.630314, "first_timestamp": "2022-03-27T00:00:00", "last_timestamp": "2022-03-27T23:59:32"}, {"demo_day": 10, "utc_date": "2022-03-28", "n_samples": 1205, "mean_uGy_per_h": 30.078484, "median_uGy_per_h": 5.206916, "min_uGy_per_h": 1.41095, "max_uGy_per_h": 735.223204, "first_timestamp": "2022-03-28T00:00:00", "last_timestamp": "2022-03-28T23:58:33"}, {"demo_day": 11, "utc_date": "2022-03-29", "n_samples": 1199, "mean_uGy_per_h": 31.657153, "median_uGy_per_h": 5.138188, "min_uGy_per_h": 1.412573, "max_uGy_per_h": 610.939444, "first_timestamp": "2022-03-29T00:00:00", "last_timestamp": "2022-03-29T23:57:04"}, {"demo_day": 12, "utc_date": "2022-03-30", "n_samples": 1197, "mean_uGy_per_h": 31.827143, "median_uGy_per_h": 5.078957, "min_uGy_per_h": 1.403378, "max_uGy_per_h": 732.801176, "first_timestamp": "2022-03-30T00:00:00", "last_timestamp": "2022-03-30T23:57:08"}, {"demo_day": 13, "utc_date": "2022-03-31", "n_samples": 1198, "mean_uGy_per_h": 30.294998, "median_uGy_per_h": 5.004005, "min_uGy_per_h": 1.333526, "max_uGy_per_h": 781.301619, "first_timestamp": "2022-03-31T00:00:00", "last_timestamp": "2022-03-31T23:58:30"}, {"demo_day": 14, "utc_date": "2022-04-01", "n_samples": 1192, "mean_uGy_per_h": 30.561565, "median_uGy_per_h": 5.255892, "min_uGy_per_h": 1.425631, "max_uGy_per_h": 731.333047, "first_timestamp": "2022-04-01T00:00:00", "last_timestamp": "2022-04-01T23:58:23"}];
+
+const SIMULATED = [
+  {day:1,  sys:118, dia:74, hr:64, glu:90,  temp:36.5, sleep:7.2, mood:4},
+  {day:2,  sys:116, dia:73, hr:62, glu:92,  temp:36.6, sleep:7.0, mood:4},
+  {day:3,  sys:119, dia:75, hr:66, glu:88,  temp:36.5, sleep:6.9, mood:4},
+  {day:4,  sys:121, dia:76, hr:65, glu:94,  temp:36.6, sleep:6.8, mood:4},
+  {day:5,  sys:120, dia:75, hr:68, glu:91,  temp:36.7, sleep:6.5, mood:3},
+  {day:6,  sys:124, dia:78, hr:74, glu:96,  temp:36.7, sleep:5.4, mood:3},
+  {day:7,  sys:126, dia:80, hr:78, glu:99,  temp:36.8, sleep:5.0, mood:3},
+  {day:8,  sys:128, dia:81, hr:82, glu:101, temp:36.9, sleep:4.5, mood:2},
+  {day:9,  sys:127, dia:80, hr:79, glu:98,  temp:36.8, sleep:5.6, mood:3},
+  {day:10, sys:125, dia:79, hr:76, glu:95,  temp:36.7, sleep:6.1, mood:3},
+  {day:11, sys:123, dia:78, hr:72, glu:93,  temp:36.6, sleep:6.4, mood:3},
+  {day:12, sys:132, dia:84, hr:70, glu:97,  temp:36.6, sleep:6.7, mood:3},
+  {day:13, sys:134, dia:86, hr:71, glu:98,  temp:36.7, sleep:7.0, mood:4},
+  {day:14, sys:128, dia:82, hr:69, glu:94,  temp:36.6, sleep:7.1, mood:4}
+];
+
+const HAZARDS = [
+  {id:"radiation", title:"Space Radiation",
+    text:"Invisible to the human eye, space radiation is not only stealthy but considered one of the most hazardous aspects of spaceflight.",
+    url:"https://www.nasa.gov/hrp/hazards/"},
+  {id:"isolation", title:"Isolation and Confinement",
+    text:"Behavioral responses occur among groups of people far from Earth who are isolated and confined in a small space over a long period of time.",
+    url:"https://www.nasa.gov/hrp/hazards/"},
+  {id:"distance", title:"Distance from Earth",
+    text:"Instructions, new supplies, medical care, and more become increasingly challenging to receive from Earth as astronauts venture deeper into space.",
+    url:"https://www.nasa.gov/hrp/hazards/"},
+  {id:"gravity", title:"Gravity Fields",
+    text:"Astronauts' entire bodies – muscles, bones, inner ear, and organs – must adjust to the new gravities encountered on the space station or their spacecraft, as well as on the Moon, Mars, and Earth once they return home.",
+    url:"https://www.nasa.gov/hrp/hazards/"},
+  {id:"closed", title:"Hostile/Closed Environments",
+    text:"Maintaining a safe ecosystem inside a spacecraft presents unique challenges, from ensuring optimal temperatures, pressures, and lighting, to reducing noise, monitoring microbial communities, and tracking immune responses.",
+    url:"https://www.nasa.gov/hrp/hazards/"}
+];
+
+const T = {
+  en: {
+    sub:"Crew Health Review",
+    env:"Environment",
+    envs:["Spacecraft","Space station","Rover","Planetary or lunar base"],
+    disc:"Not a medical device. Decision support only. This tool does not diagnose, treat, or predict disease, and it does not report a validated accuracy. All next actions are decided by the crew member. Indicator values in the built-in session are simulated and are not NASA measurements. Official NASA and partner text is quoted only in the hazard and resource panels, with links.",
+    source:"Built-in values: simulated 14-day demo session (not NASA data). Official context: NASA Human Research Program “5 Hazards of Human Spaceflight” and challenge-listed partner pages.",
+    today:"Selected day",
+    trends:"Trends in this session",
+    flags:"Needs a closer look",
+    decide:"Crew decision",
+    decideHelp:"The software only lists options. The crew member chooses what to do next. A Local AI Summary is sent only to the endpoint you set, and only when you click the button. Crew decisions stay on this device.",
+    aiTitle:"Local AI Summary",
+    aiHelp:"Sends only this session's selected-day values and simple trends to the local OpenAI-compatible endpoint you set below. The default points at this computer. No API key is stored in this page. The result is a draft in plain English, not a diagnosis. The crew member decides what to do next.",
+    endpoint:"Local endpoint",
+    model:"Model name (optional)",
+    aiBtn:"Local AI Summary",
+    aiWait:"Requesting a local AI draft…",
+    aiDraft:"AI draft – crew decides",
+    aiUnavailable:"Local AI unavailable – rule-based summary",
+    radTitle:"Mission radiation exposure",
+    radHelp:"Public ISS instrument readings from NASA OSDR RadLab, not a personal medical record and not a diagnosis. Instrument DosTel1 on the ISS. Daily mean and median of absorbed dose rate (microGy/h) for 19 Mar–1 Apr 2022, mapped to demo days 1–14. The simulated health indicators above are separate and are not NASA measurements.",
+    radMean:"Daily mean",
+    radMedian:"Daily median",
+    radRange:"Min–max that day",
+    radN:"Readings that day",
+    radCite:"Data and visualizations are courtesy of the RadLab Portal (https://visualization.osdr.nasa.gov/radlab/gui/overview/). Details and file checksums: data/radlab/SOURCES.md",
+    log:"Decision log (this device only)",
+    hazards:"Five hazards (NASA HRP)",
+    hazardIntro:"Official short descriptions from NASA's Human Research Program hazards page. Hazards can interact; this panel is background, not a diagnosis.",
+    hazardSrc:'Source: NASA HRP, “5 Hazards of Human Spaceflight” — https://www.nasa.gov/hrp/hazards/',
+    partners:"Partner resources",
+    partnerHtml:'<p>Listed on the official challenge Resources tab. Quoted only where the page was retrieved:</p><ul><li><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA: 5 Hazards of Human Spaceflight</a></li><li><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">NASA: Risks of Human Spaceflight</a> (includes, among others, cardiovascular adaptations, bone changes, behavioral health, inadequate sleep, and radiation-induced cancers — titles only, no invented results)</li><li><a href="https://www.nasa.gov/hrp/ongoing-hrp-research/" target="_blank" rel="noopener">NASA: Ongoing HRP Research</a></li><li><a href="https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp" target="_blank" rel="noopener">CSA: Monitoring radiation for astronaut health</a> (26 Feb 2026). Official page: radiation is a key challenge beyond Earth atmosphere; neutron radiation “contributes to about 30% of total radiation on the ISS.”</li><li><a href="https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp" target="_blank" rel="noopener">CSA: Why do we conduct science experiments in space?</a> Longer Moon/Mars trips: more weightlessness, radiation, isolation, communication delay, and less ability to rely on Earth for emergency medical assistance.</li></ul>',
+    body:"Indicator map",
+    bodyNote:"Click a region to highlight related indicators. This is a navigation aid, not an anatomy exam or diagnosis.",
+    import:"Load another session",
+    importHelp:"CSV columns: day,sys,dia,hr,glu,temp,sleep,mood. Imported numbers are still treated as a local session, not as official NASA data, unless you document otherwise outside this demo.",
+    reset:"Reload demo session",
+    flagHelp:"Flags use illustrative, local comparison rules against the first three days of this session (or simple session limits). They are not NASA or clinical diagnostic thresholds and have not been validated.",
+    noFlags:"No illustrative review cues on this day.",
+    actions:[
+      ["remeasure","Re-measure this day's indicators"],
+      ["sleep","Protect a rest or sleep block"],
+      ["note","Add a personal note and continue"],
+      ["ground","Request a discussion with ground / a flight surgeon"],
+      ["none","No change for now"]
+    ],
+    metrics:{
+      sys:["Blood pressure (sys)", "mm Hg"],
+      dia:["Blood pressure (dia)", "mm Hg"],
+      hr:["Heart rate","bpm"],
+      glu:["Blood sugar","mg/dL"],
+      temp:["Body temperature","°C"],
+      sleep:["Daily sleep","hours"],
+      mood:["Mood (self-report)","1–5 (5=best)"]
+    },
+    flagReasons:{
+      sleepLow:"Sleep hours are low versus this session's early-day average, or at or below the demo cue of 5.0 h.",
+      moodLow:"Self-reported mood is 2 or lower in this session.",
+      hrUp:"Heart rate is higher than this session's early-day average by the demo cue of 15 bpm.",
+      sysUp:"Systolic pressure is higher than this session's early-day average by the demo cue of 12 mm Hg.",
+      gluShift:"Blood sugar differs from this session's early-day average by the demo cue of 25 mg/dL.",
+      tempHigh:"Temperature is at or above the demo cue of 37.5 °C."
+    },
+    logged:"Recorded crew decision",
+    footer:"Calm Signal is a Space Apps 2026 prototype for “Create Health Monitoring Software for Astronauts on Space Missions.” Official challenge: https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/ — Not a medical device."
+  },
+  zh: {
+    sub:"組員健康檢視",
+    env:"環境",
+    envs:["太空船","太空站","漫遊車","行星或月球基地"],
+    disc:"本工具不是醫療器材，僅供決策輔助。不診斷、不治療、不預測疾病，也不宣稱已驗證的準確度。後續動作一律由組員自行決定。內建時段的數值是模擬資料，不是 NASA 量測值。NASA 與合作機構的原文只出現在危害與資源區塊，並附連結。",
+    source:"內建數值：模擬的 14 日示範時段（非 NASA 資料）。官方背景：NASA 人類研究計畫「太空飛行五大危害」及題目頁列出的合作機構頁面。",
+    today:"選定日",
+    trends:"此時段的趨勢",
+    flags:"建議再看一次",
+    decide:"組員決定",
+    decideHelp:"軟體只列出選項，由組員決定下一步。只有在你按下按鈕時，Local AI Summary 才會送到你設定的端點。組員決定只留在本機。",
+    aiTitle:"Local AI Summary",
+    aiHelp:"只把此時段選定日的指標與簡單趨勢，送到下方你設定的本機 OpenAI 相容端點。預設指向這台電腦。本頁不存放任何金鑰。產出的是白話英文草稿，不是診斷。下一步由組員決定。",
+    endpoint:"本機端點",
+    model:"模型名稱（選填）",
+    aiBtn:"Local AI Summary",
+    aiWait:"正在向本機 AI 請求草稿…",
+    aiDraft:"AI draft – crew decides",
+    aiUnavailable:"Local AI unavailable – rule-based summary",
+    radTitle:"任務輻射暴露",
+    radHelp:"這是 NASA OSDR RadLab 公開的 ISS 儀器讀數，不是個人醫療紀錄，也不是診斷。儀器為國際太空站上的 DosTel1。數值是 2022-03-19 至 2022-04-01 吸收劑量率（microGy/h）的每日平均與中位數，對應示範第 1–14 日。上方的模擬健康指標是另一份資料，不是 NASA 量測值。",
+    radMean:"當日平均",
+    radMedian:"當日中位數",
+    radRange:"當日最低–最高",
+    radN:"當日筆數",
+    radCite:"Data and visualizations are courtesy of the RadLab Portal (https://visualization.osdr.nasa.gov/radlab/gui/overview/). 說明與檔案檢查碼見 data/radlab/SOURCES.md",
+    log:"決定紀錄（只留在本機）",
+    hazards:"五大危害（NASA HRP）",
+    hazardIntro:"以下短述取自 NASA 人類研究計畫危害頁。危害可能互相影響；此區是背景說明，不是診斷。",
+    hazardSrc:"來源：NASA HRP，「5 Hazards of Human Spaceflight」— https://www.nasa.gov/hrp/hazards/",
+    partners:"合作機構資源",
+    partnerHtml:'<p>官方題目 Resources 頁列出的資料。僅在已成功取得頁面時摘錄：</p><ul><li><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA：太空飛行五大危害</a></li><li><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">NASA：太空飛行風險</a>（標題包括心血管適應、骨骼變化、行為健康、睡眠不足、輻射相關癌症等；此處只列官方標題，不編造研究結果）</li><li><a href="https://www.nasa.gov/hrp/ongoing-hrp-research/" target="_blank" rel="noopener">NASA：進行中的 HRP 研究</a></li><li><a href="https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp" target="_blank" rel="noopener">加拿大太空總署：為太空人健康監測輻射</a>（2026-02-26）。官方頁寫：大氣保護之外，輻射是主要挑戰之一；中子輻射「約占國際太空站總輻射的 30%」。</li><li><a href="https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp" target="_blank" rel="noopener">加拿大太空總署：為何在太空做科學實驗</a>。前往月球與火星的較長任務：更久的失重、更多輻射、更長的隔離、與地球通訊延遲，以及較難仰賴地球提供緊急醫療。</li></ul>',
+    body:"指標對照圖",
+    bodyNote:"點選區域可對到相關指標。這是導覽，不是身體檢查或診斷。",
+    import:"載入其他時段",
+    importHelp:"CSV 欄位：day,sys,dia,hr,glu,temp,sleep,mood。匯入的數字仍視為本機時段，不是官方 NASA 資料，除非你在本示範之外另外註明。",
+    reset:"重新載入示範時段",
+    flagHelp:"標記規則是本示範用的本地比較（對照此前三天平均，或簡單的示範界限），不是 NASA 或臨床診斷閾值，也未經驗證。",
+    noFlags:"這一天沒有示範用的複看提示。",
+    actions:[
+      ["remeasure","重測這一天的指標"],
+      ["sleep","安排休息或睡眠時段"],
+      ["note","留下個人備註並繼續"],
+      ["ground","請求與地面／隨任務醫師討論"],
+      ["none","目前先不改變"]
+    ],
+    metrics:{
+      sys:["收縮壓","mm Hg"],
+      dia:["舒張壓","mm Hg"],
+      hr:["心率","bpm"],
+      glu:["血糖","mg/dL"],
+      temp:["體溫","°C"],
+      sleep:["當日睡眠","小時"],
+      mood:["心情（自評）","1–5（5 最好）"]
+    },
+    flagReasons:{
+      sleepLow:"睡眠時數低於此一時段前段平均，或達到示範提示值 5.0 小時（含）以下。",
+      moodLow:"此時段自評心情為 2 或更低。",
+      hrUp:"心率高於此一時段前段平均達示範提示值 15 bpm。",
+      sysUp:"收縮壓高於此一時段前段平均達示範提示值 12 mm Hg。",
+      gluShift:"血糖與此時段前段平均相差達示範提示值 25 mg/dL。",
+      tempHigh:"體溫達到示範提示值 37.5 °C（含）以上。"
+    },
+    logged:"已記錄組員決定",
+    footer:"Calm Signal 是 2026 Space Apps 題目「Create Health Monitoring Software for Astronauts on Space Missions」的原型。官方題目：https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/ — 不是醫療器材。"
+  }
+};
+
+const KEYS = ["sys","dia","hr","glu","temp","sleep","mood"];
+let lang = "en";
+let rows = SIMULATED.map(r => ({...r}));
+let day = 8;
+let logs = [];
+let activePart = null;
+
+function txt(){ return T[lang]; }
+function meanEarly(key){
+  const early = rows.filter(r => r.day <= 3);
+  if (!early.length) return rows[0][key];
+  return early.reduce((s,r)=>s+r[key],0)/early.length;
+}
+function flagsFor(row){
+  const out = [];
+  if (row.sleep <= 5.0 || row.sleep <= meanEarly("sleep") - 1.5) out.push("sleepLow");
+  if (row.mood <= 2) out.push("moodLow");
+  if (row.hr >= meanEarly("hr") + 15) out.push("hrUp");
+  if (row.sys >= meanEarly("sys") + 12) out.push("sysUp");
+  if (Math.abs(row.glu - meanEarly("glu")) >= 25) out.push("gluShift");
+  if (row.temp >= 37.5) out.push("tempHigh");
+  return out;
+}
+function statusOf(key, row){
+  const f = flagsFor(row);
+  if ((key==="sleep" && f.includes("sleepLow")) ||
+      (key==="mood" && f.includes("moodLow")) ||
+      (key==="hr" && f.includes("hrUp")) ||
+      (key==="sys" && f.includes("sysUp")) ||
+      (key==="glu" && f.includes("gluShift")) ||
+      (key==="temp" && f.includes("tempHigh"))) return "flag";
+  return "ok";
+}
+function applyLang(){
+  const t = txt();
+  document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+  document.getElementById("t-sub").textContent = t.sub;
+  document.getElementById("t-env").textContent = t.env;
+  const env = document.getElementById("env");
+  const keep = env.value;
+  env.innerHTML = t.envs.map((n,i)=>`<option value="${i}">${n}</option>`).join("");
+  env.value = keep || "0";
+  document.getElementById("disclaimer").textContent = t.disc;
+  document.getElementById("source-note").textContent = t.source;
+  document.getElementById("badge-sim").textContent = lang==="zh" ? "模擬時段" : "SIMULATED SESSION";
+  document.getElementById("t-today").textContent = t.today;
+  document.getElementById("t-trends").textContent = t.trends;
+  document.getElementById("t-flags").textContent = t.flags;
+  document.getElementById("t-decide").textContent = t.decide;
+  document.getElementById("decide-help").textContent = t.decideHelp;
+  document.getElementById("t-log").textContent = t.log;
+  document.getElementById("t-hazards").textContent = t.hazards;
+  document.getElementById("hazard-intro").textContent = t.hazardIntro;
+  document.getElementById("hazard-src").innerHTML = t.hazardSrc;
+  document.getElementById("t-partners").textContent = t.partners;
+  document.getElementById("partners").innerHTML = t.partnerHtml;
+  document.getElementById("t-body").textContent = t.body;
+  document.getElementById("body-note").textContent = t.bodyNote;
+  document.getElementById("t-import").textContent = t.import;
+  document.getElementById("import-help").textContent = t.importHelp;
+  document.getElementById("reset").textContent = t.reset;
+  document.getElementById("flag-help").textContent = t.flagHelp;
+  document.getElementById("footer").textContent = t.footer;
+  document.getElementById("t-ai").textContent = t.aiTitle;
+  document.getElementById("ai-help").textContent = t.aiHelp;
+  document.getElementById("t-endpoint").textContent = t.endpoint;
+  document.getElementById("t-model").textContent = t.model;
+  document.getElementById("btn-ai").textContent = t.aiBtn;
+  document.getElementById("t-rad").textContent = t.radTitle;
+  document.getElementById("rad-help").textContent = t.radHelp;
+  document.getElementById("rad-cite").textContent = t.radCite;
+  document.getElementById("lang-en").setAttribute("aria-pressed", lang==="en");
+  document.getElementById("lang-zh").setAttribute("aria-pressed", lang==="zh");
+  render();
+}
+
+function currentRow(){ return rows.find(r => r.day === day) || rows[rows.length-1]; }
+
+function renderMetrics(){
+  const t = txt();
+  const row = currentRow();
+  const box = document.getElementById("metrics");
+  const show = ["sys","dia","hr","glu","temp","sleep","mood"];
+  box.innerHTML = show.map(k=>{
+    const [label, unit] = t.metrics[k];
+    let val = row[k];
+    if (k==="sys") val = `${row.sys}/${row.dia}`;
+    if (k==="dia") return "";
+    const st = (k==="sys") ? (statusOf("sys",row)==="flag"?"flag":"ok") : statusOf(k,row);
+    const unit2 = k==="sys" ? "mm Hg" : unit;
+    return `<div class="metric ${st}" data-key="${k}"><div class="k">${label}</div><div class="v">${val}</div><div class="u">${unit2}</div></div>`;
+  }).join("");
+}
+
+function drawChart(canvas, key, color){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = canvas.clientWidth * 2;
+  const h = canvas.height = 110 * 2;
+  ctx.clearRect(0,0,w,h);
+  const vals = rows.map(r => r[key]);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const pad = (max-min) || 1;
+  ctx.strokeStyle = "#1e4450"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(40,20); ctx.lineTo(40,h-24); ctx.lineTo(w-10,h-24); ctx.stroke();
+  ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 3;
+  vals.forEach((v,i)=>{
+    const x = 40 + i*(w-60)/Math.max(1,vals.length-1);
+    const y = 20 + (1-(v-min)/pad)*(h-44);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  const idx = rows.findIndex(r=>r.day===day);
+  if (idx>=0){
+    const x = 40 + idx*(w-60)/Math.max(1,vals.length-1);
+    const y = 20 + (1-(vals[idx]-min)/pad)*(h-44);
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = color; ctx.stroke();
+  }
+}
+
+function renderCharts(){
+  const t = txt();
+  const wrap = document.getElementById("charts");
+  const items = [["sys","#3cb8b0"],["hr","#7ec8e3"],["glu","#e0b14a"],["temp","#e07a5f"],["sleep","#8fbf7a"],["mood","#c89be0"]];
+  wrap.innerHTML = items.map(([k,c])=>{
+    return `<div class="chart-box"><div class="k muted">${t.metrics[k][0]}</div><canvas data-key="${k}" data-color="${c}"></canvas></div>`;
+  }).join("");
+  wrap.querySelectorAll("canvas").forEach(cv => drawChart(cv, cv.dataset.key, cv.dataset.color));
+}
+
+function renderFlags(){
+  const t = txt();
+  const row = currentRow();
+  const fs = flagsFor(row);
+  const ul = document.getElementById("flags");
+  if (!fs.length){ ul.innerHTML = `<li class="none">${t.noFlags}</li>`; return; }
+  ul.innerHTML = fs.map(id => `<li>${t.flagReasons[id]}</li>`).join("");
+}
+
+function renderActions(){
+  const t = txt();
+  document.getElementById("actions").innerHTML = t.actions.map(([id,label]) =>
+    `<button type="button" data-act="${id}">${label}</button>`).join("");
+  document.querySelectorAll("#actions button").forEach(b=>{
+    b.onclick = () => {
+      const label = t.actions.find(a=>a[0]===b.dataset.act)[1];
+      logs.unshift({day, env: document.getElementById("env").selectedOptions[0].textContent, act: label, ts: new Date().toISOString()});
+      renderLog();
+    };
+  });
+}
+function renderLog(){
+  const t = txt();
+  const box = document.getElementById("log");
+  if (!logs.length){ box.innerHTML = ""; return; }
+  box.innerHTML = logs.map(e => `<div>${t.logged}: ${e.act} — day ${e.day} — ${e.env}</div>`).join("");
+}
+
+let activeHazard = null;
+function renderHazards(){
+  const box = document.getElementById("hazards");
+  box.innerHTML = HAZARDS.map(h =>
+    `<div class="hazard" data-id="${h.id}"><h3>${h.title}</h3><p>${h.text}</p></div>`
+  ).join("");
+  box.querySelectorAll(".hazard").forEach(el=>{
+    el.classList.toggle("active", el.dataset.id===activeHazard);
+    el.onclick = () => {
+      activeHazard = (activeHazard===el.dataset.id) ? null : el.dataset.id;
+      box.querySelectorAll(".hazard").forEach(h=>h.classList.toggle("active", h.dataset.id===activeHazard));
+    };
+  });
+}
+
+function renderBody(){
+  document.getElementById("body").innerHTML = `
+  <svg viewBox="0 0 100 200" aria-label="Crew figure">
+    <circle class="hit" data-part="head" cx="50" cy="22" r="16"></circle>
+    <rect class="hit" data-part="chest" x="32" y="42" width="36" height="50" rx="10"></rect>
+    <rect class="hit" data-part="abdomen" x="34" y="94" width="32" height="36" rx="8"></rect>
+    <rect class="hit" data-part="legs" x="34" y="132" width="32" height="58" rx="8"></rect>
+  </svg>`;
+  document.querySelectorAll(".hit").forEach(el=>{
+    el.onclick = () => { activePart = el.dataset.part; render(); };
+  });
+}
+
+function highlightPart(){
+  document.querySelectorAll(".hit").forEach(el=>{
+    el.classList.toggle("on", el.dataset.part===activePart);
+  });
+  const map = {head:["mood","sleep"], chest:["sys","hr"], abdomen:["glu","temp"], legs:["sleep"]};
+  const keys = new Set(map[activePart]||[]);
+  document.querySelectorAll(".metric").forEach(m=>{
+    m.classList.toggle("focus", keys.has(m.dataset.key));
+  });
+}
+
+function render(){
+  document.getElementById("day").max = Math.max(...rows.map(r=>r.day));
+  document.getElementById("day").min = Math.min(...rows.map(r=>r.day));
+  document.getElementById("day-label").textContent = (lang==="zh"?"第 ":"Day ") + day;
+  renderMetrics();
+  renderCharts();
+  renderRadiation();
+  renderFlags();
+  renderActions();
+  renderLog();
+  highlightPart();
+}
+
+function parseCsv(text){
+  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  const out = [];
+  for (const line of lines){
+    if (/^\s*day\s*,/i.test(line)) continue;
+    const p = line.split(",").map(s=>s.trim());
+    if (p.length < 8) continue;
+    out.push({
+      day:+p[0], sys:+p[1], dia:+p[2], hr:+p[3], glu:+p[4], temp:+p[5], sleep:+p[6], mood:+p[7]
+    });
+  }
+  if (!out.length) throw new Error("No rows");
+  return out.sort((a,b)=>a.day-b.day);
+}
+
+document.getElementById("day").addEventListener("input", e=>{ day = +e.target.value; render(); });
+document.getElementById("lang-en").onclick = ()=>{ lang="en"; applyLang(); };
+document.getElementById("lang-zh").onclick = ()=>{ lang="zh"; applyLang(); };
+document.getElementById("reset").onclick = ()=>{ rows = SIMULATED.map(r=>({...r})); day=8; logs=[]; applyLang(); };
+document.getElementById("file").addEventListener("change", ev=>{
+  const f = ev.target.files[0]; if(!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      rows = parseCsv(String(reader.result));
+      day = rows[Math.min(rows.length-1, 0)].day;
+      logs = [];
+      applyLang();
+    } catch (err) { alert("Could not read CSV. Expected: day,sys,dia,hr,glu,temp,sleep,mood"); }
+  };
+  reader.readAsText(f);
+});
+
+
+const DEFAULT_ENDPOINT = "http://localhost:11434/v1";
+const AI_SYSTEM = "You write a short plain-English briefing for a crew member who is reviewing simulated health indicators. You are not a clinician and you are not a medical device. Do not diagnose, treat, or predict disease. Do not claim validated accuracy. Do not invent NASA measurements or study results. The health-indicator numbers are a simulated demo session, not NASA measurements. A separate block named nasa_osdr_radlab_iss_dostel1 is real public ISS instrument telemetry (absorbed dose rate). Do not treat it as a personal medical record. Do not diagnose. In SUMMARY, include the exact utc_date, instrument_id, daily_median, daily_mean, and n_samples from that block, with the unit microGy/h. Do not invent other radiation values. Write in English. Use this exact layout:\nSUMMARY:\n<3 to 5 short sentences, including those RadLab figures>\nOPTIONS:\n1. <one action the crew could consider>\n2. <another action>\n3. <another action>\nEnd by reminding the reader that the crew member decides what to do next.";
+
+function aiEndpoint(){
+  const el = document.getElementById("ai-endpoint");
+  let v = ((el && el.value) || "").trim() || DEFAULT_ENDPOINT;
+  return v.replace(/\/+$/, "");
+}
+
+function showAiResult(mode, tag, summary, options){
+  const box = document.getElementById("ai-result");
+  box.classList.remove("hidden", "mode-ai", "mode-fallback");
+  box.classList.add(mode === "ai" ? "mode-ai" : "mode-fallback");
+  document.getElementById("ai-tag").textContent = tag;
+  document.getElementById("ai-text").textContent = summary;
+  const sourced = document.getElementById("ai-sourced");
+  if (sourced){
+    if (mode === "ai"){
+      sourced.classList.remove("hidden");
+      sourced.textContent = "Sourced radiation figures from the included NASA OSDR RadLab file (ISS DosTel1). These numbers are read from the project data file, not generated by the model. " + radiationBlurb(day);
+    } else {
+      sourced.classList.add("hidden");
+      sourced.textContent = "";
+    }
+  }
+  const ul = document.getElementById("ai-options");
+  ul.innerHTML = (options || []).map(o => "<li>" + String(o).replace(/[<>&]/g, s => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[s])) + "</li>").join("");
+}
+
+
+function radiationForDay(d){
+  return RADIATION_DAILY.find(r => r.demo_day === d) || null;
+}
+function radiationBlurb(d){
+  const r = radiationForDay(d);
+  if (!r) return "No RadLab daily row is mapped to this demo day.";
+  const meds = RADIATION_DAILY.map(x => x.median_uGy_per_h);
+  const medAll = meds.reduce((a,b)=>a+b,0)/meds.length;
+  return "NASA OSDR RadLab, ISS instrument DosTel1, UTC date " + r.utc_date + " (mapped to demo day " + r.demo_day + "): daily median absorbed dose rate " + r.median_uGy_per_h + " microGy/h, daily mean " + r.mean_uGy_per_h + " microGy/h, min " + r.min_uGy_per_h + ", max " + r.max_uGy_per_h + ", n=" + r.n_samples + " public API readings (field absorbed_dose_rate). Median of the 14-day slice is " + medAll.toFixed(3) + " microGy/h. This is ISS radiation-environment telemetry, not a personal medical record and not a diagnosis.";
+}
+function renderRadiation(){
+  const t = txt();
+  const r = radiationForDay(day);
+  const box = document.getElementById("rad-stats");
+  if (!r){ box.innerHTML = "<p class='muted'>No RadLab row for this day.</p>"; return; }
+  box.innerHTML = ""
+    + "<div class='metric'><div class='k'>" + t.radMedian + "</div><div class='v'>" + r.median_uGy_per_h.toFixed(2) + "</div><div class='u'>microGy/h · " + r.utc_date + "</div></div>"
+    + "<div class='metric'><div class='k'>" + t.radMean + "</div><div class='v'>" + r.mean_uGy_per_h.toFixed(2) + "</div><div class='u'>microGy/h</div></div>"
+    + "<div class='metric'><div class='k'>" + t.radRange + "</div><div class='v'>" + r.min_uGy_per_h.toFixed(2) + "–" + r.max_uGy_per_h.toFixed(1) + "</div><div class='u'>microGy/h</div></div>"
+    + "<div class='metric'><div class='k'>" + t.radN + "</div><div class='v'>" + r.n_samples + "</div><div class='u'>DosTel1 · ISS</div></div>";
+  const canvas = document.getElementById("rad-chart");
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = canvas.clientWidth * 2;
+  const h = canvas.height = 120 * 2;
+  ctx.clearRect(0,0,w,h);
+  const vals = RADIATION_DAILY.map(x => x.median_uGy_per_h);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const pad = (max-min) || 1;
+  ctx.strokeStyle = "#1e4450"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(40,20); ctx.lineTo(40,h-24); ctx.lineTo(w-10,h-24); ctx.stroke();
+  ctx.beginPath(); ctx.strokeStyle = "#e0b14a"; ctx.lineWidth = 3;
+  vals.forEach((v,i)=>{
+    const x = 40 + i*(w-60)/Math.max(1,vals.length-1);
+    const y = 20 + (1-(v-min)/pad)*(h-44);
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  const idx = RADIATION_DAILY.findIndex(x => x.demo_day === day);
+  if (idx>=0){
+    const x = 40 + idx*(w-60)/Math.max(1,vals.length-1);
+    const y = 20 + (1-(vals[idx]-min)/pad)*(h-44);
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "#e0b14a"; ctx.stroke();
+  }
+}
+
+function ruleBasedSummary(){
+  const t = txt();
+  const row = currentRow();
+  const fs = flagsFor(row);
+  const label = (k) => t.metrics[k][0];
+  let summary;
+  const options = [];
+  const act = (id) => (t.actions.find(a => a[0] === id) || [id, id])[1];
+  if (fs.length){
+    const reasons = fs.map(id => t.flagReasons[id]).join(" ");
+    summary = "This is a rule-based review, not a diagnosis. The health-indicator values are a simulated session, not NASA measurements. On day " + row.day + ", illustrative cues were raised. " + reasons + " Current simulated values: " + label("sys") + " " + row.sys + "/" + row.dia + " mm Hg, " + label("hr") + " " + row.hr + " bpm, " + label("glu") + " " + row.glu + " mg/dL, " + label("temp") + " " + row.temp + " C, " + label("sleep") + " " + row.sleep + " h, mood " + row.mood + "/5. " + radiationBlurb(row.day) + " The crew member decides what to do next.";
+    if (fs.includes("sleepLow") || fs.includes("moodLow")) options.push(act("sleep"));
+    if (fs.includes("hrUp") || fs.includes("sysUp") || fs.includes("gluShift") || fs.includes("tempHigh")) options.push(act("remeasure"));
+    options.push(act("ground"));
+  } else {
+    summary = "This is a rule-based review, not a diagnosis. The health-indicator values are a simulated session, not NASA measurements. On day " + row.day + ", no illustrative review cues were raised against the early-day average or the demo limits. Current simulated values: " + label("sys") + " " + row.sys + "/" + row.dia + " mm Hg, " + label("hr") + " " + row.hr + " bpm, " + label("sleep") + " " + row.sleep + " h, mood " + row.mood + "/5. " + radiationBlurb(row.day) + " The crew member may still review the values and decide what to do next.";
+    options.push(act("note"), act("none"));
+  }
+  const uniq = [];
+  options.forEach(o => { if (o && !uniq.includes(o)) uniq.push(o); });
+  return {mode:"fallback", tag: t.aiUnavailable, summary, options: uniq.slice(0,3)};
+}
+
+function sessionPayload(){
+  const row = currentRow();
+  const envEl = document.getElementById("env");
+  const env = envEl && envEl.selectedOptions[0] ? envEl.selectedOptions[0].textContent : "";
+  const cues = flagsFor(row);
+  const t = txt();
+  return {
+    notice: "Health-indicator values are from a simulated demo session and are not NASA measurements. The mission radiation block is real public ISS instrument data from NASA OSDR RadLab (DosTel1). It is not a personal medical record.",
+    environment: env,
+    day: row.day,
+    nasa_osdr_radlab_iss_dostel1: (function(){ const r=radiationForDay(row.day); return r ? {instrument_id:"DosTel1", spacecraft:"ISS", utc_date:r.utc_date, unit:"microGy/h", field:"absorbed_dose_rate", daily_median:r.median_uGy_per_h, daily_mean:r.mean_uGy_per_h, daily_min:r.min_uGy_per_h, daily_max:r.max_uGy_per_h, n_samples:r.n_samples, source:"NASA OSDR RadLab", portal:"https://visualization.osdr.nasa.gov/radlab/gui/overview/"} : null; })(),
+
+    current: {systolic_mm_Hg: row.sys, diastolic_mm_Hg: row.dia, heart_rate_bpm: row.hr, blood_sugar_mg_dL: row.glu, temperature_C: row.temp, sleep_hours: row.sleep, mood_1_to_5: row.mood},
+    early_session_mean_days_1_to_3: {systolic_mm_Hg: +meanEarly("sys").toFixed(1), heart_rate_bpm: +meanEarly("hr").toFixed(1), blood_sugar_mg_dL: +meanEarly("glu").toFixed(1), temperature_C: +meanEarly("temp").toFixed(1), sleep_hours: +meanEarly("sleep").toFixed(1), mood_1_to_5: +meanEarly("mood").toFixed(1)},
+    illustrative_review_cues: cues,
+    cue_notes_demo_only: cues.map(id => t.flagReasons[id])
+  };
+}
+
+function parseAiText(text){
+  const raw = String(text || "").trim();
+  let summary = raw;
+  let options = [];
+  const sm = raw.match(/SUMMARY:\s*([\s\S]*?)(?=\n\s*OPTIONS:|$)/i);
+  const om = raw.match(/OPTIONS:\s*([\s\S]*)/i);
+  if (sm) summary = sm[1].trim();
+  if (om){
+    options = om[1].split(/\n/).map(s => s.replace(/^\s*\d+[\.)]\s*/, "").replace(/^\s*[-*]\s*/, "").trim()).filter(Boolean).slice(0,3);
+  }
+  if (!summary) summary = raw;
+  return {summary, options};
+}
+
+let aiBusy = false;
+async function requestAiSummary(){
+  const t = txt();
+  if (aiBusy) return;
+  aiBusy = true;
+  const btn = document.getElementById("btn-ai");
+  const status = document.getElementById("ai-status");
+  btn.disabled = true;
+  status.textContent = t.aiWait;
+  const model = (document.getElementById("ai-model").value || "").trim() || "local-model";
+  const url = aiEndpoint() + "/chat/completions";
+  const body = {
+    model: model,
+    temperature: 0.7,
+    messages: [
+      {role: "system", content: AI_SYSTEM},
+      {role: "user", content: "Include the exact nasa_osdr_radlab_iss_dostel1 figures (utc_date, instrument_id, daily_median, daily_mean, n_samples, unit) in SUMMARY. Do not invent other radiation numbers.\n\n" + JSON.stringify(sessionPayload())}
+    ]
+  };
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(function(){ ctrl.abort(); }, 90000);
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+      signal: ctrl.signal
+    });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error("status " + res.status);
+    const data = await res.json();
+    const text = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if (!text || !String(text).trim()) throw new Error("empty");
+    const parsed = parseAiText(text);
+    showAiResult("ai", t.aiDraft, parsed.summary, parsed.options);
+    status.textContent = "";
+  } catch (err){
+    const fb = ruleBasedSummary();
+    showAiResult(fb.mode, fb.tag, fb.summary, fb.options);
+    status.textContent = t.aiUnavailable;
+  } finally {
+    aiBusy = false;
+    btn.disabled = false;
+  }
+}
+
+document.getElementById("btn-ai").onclick = requestAiSummary;
+renderBody();
+renderHazards();
+applyLang();
+  </script>
+</body>
+</html>
