@@ -374,6 +374,42 @@
     .team-cred { font-family: inherit; }
     @media (max-width: 700px) { .pills { width: auto; border: 0; gap: 4px; } .pill { border: 1px solid var(--line); } .pill:last-child { border-right: 1px solid var(--line); } }
     @media (prefers-reduced-motion: reduce) { #ai-panel .think::after, #ai-panel.thinking::after { animation: none !important; } }
+
+    /* ---- v3.2: field-checked scenarios ---- */
+    .scen-wrap { padding: 16px 20px 0; }
+    .scen-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 6px; }
+    .scen-table th { text-align: left; font-family: var(--f-mono); font-weight: 500; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--hair2); padding: 6px 10px; }
+    .scen-table td { vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); line-height: 1.45; }
+    .scen-table td:first-child { font-family: var(--f-ui); font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .scen-table td:first-child span { display: block; font-family: var(--f-mono); font-weight: 500; font-size: 10px; color: var(--amber); letter-spacing: .1em; }
+    .scen-table td.lim { color: var(--muted); }
+    .scen-table a { color: var(--teal); }
+    .scen-note { font-family: var(--f-mono); font-size: 10px; color: var(--muted); margin: 8px 0 0; }
+    @media (max-width: 900px) {
+      .scen-table thead { display: none; } .scen-table, .scen-table tbody, .scen-table tr, .scen-table td { display: block; width: 100%; }
+      .scen-table tr { border: 1px solid var(--line); margin-bottom: 8px; } .scen-table td { border-bottom: 0; } .scen-table td:first-child { white-space: normal; }
+      .scen-table td[data-h]::before { content: attr(data-h); display: block; font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+    }
+
+    /* ---- v3.2: validation / self-test ---- */
+    .val-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; }
+    @media (max-width: 900px) { .val-grid { grid-template-columns: 1fr; } }
+    .val-block { border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; background: #0b1013; }
+    .val-block h4 { margin: 0 0 6px; font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; }
+    .val-block.ok h4 { color: var(--teal); } .val-block.no h4 { color: var(--amber); }
+    .val-block ul { margin: 0; padding-left: 16px; font-size: 12.5px; } .val-block li { margin: 2px 0; }
+    .build { font-family: var(--f-mono); font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; }
+    .build b { color: var(--ink); font-weight: 600; }
+    .st-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .st-sum { font-family: var(--f-mono); font-size: 12px; }
+    .st-list { list-style: none; margin: 8px 0 0; padding: 0; font-size: 12.5px; }
+    .st-list li { display: grid; grid-template-columns: 58px 1fr; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+    .st-list .st { font-family: var(--f-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .1em; padding: 1px 0; text-align: center; border: 1px solid; border-radius: 2px; height: fit-content; }
+    .st-list .pass { color: var(--teal); border-color: rgba(98,214,180,.5); }
+    .st-list .fail { color: #ff6b5b; border-color: rgba(255,107,91,.6); }
+    .st-list .skip { color: var(--muted); border-color: var(--line); }
+    .st-list .d { display: block; font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); margin-top: 2px; word-break: break-word; }
   </style>
 </head>
 <body>
@@ -458,6 +494,31 @@
       <ul class="crit-list" id="crit-list"></ul>
     </div>
   </section>
+  <div class="scen-wrap">
+    <section class="card enter" id="scen-panel" style="--d:.7s">
+      <h2 id="t-scen" data-pid="SC-00">Field-checked scenarios</h2>
+      <p class="muted" id="scen-intro"></p>
+      <table class="scen-table"><thead><tr><th id="sh-1"></th><th id="sh-2"></th><th id="sh-3"></th><th id="sh-4"></th></tr></thead><tbody id="scen-body"></tbody></table>
+      <p class="scen-note" id="scen-note"></p>
+    </section>
+
+    <section class="card enter" id="val-panel" style="--d:.75s;margin-top:16px">
+      <h2 id="t-val" data-pid="QA-01">Validation status &amp; live self-test</h2>
+      <div class="val-grid">
+        <div>
+          <div class="val-block ok"><h4 id="vb-ok-h"></h4><ul id="vb-ok"></ul></div>
+          <div class="val-block no" style="margin-top:10px"><h4 id="vb-no-h"></h4><ul id="vb-no"></ul></div>
+          <div class="build" id="build"></div>
+          <p class="scen-note" id="prov"></p>
+        </div>
+        <div>
+          <div class="st-head"><button type="button" class="primary" id="btn-selftest">Run self-test</button><span class="st-sum" id="st-sum"></span></div>
+          <ul class="st-list" id="st-list"></ul>
+          <p class="scen-note" id="st-note"></p>
+        </div>
+      </div>
+    </section>
+  </div>
   <main>
     <div>
       <section class="card">
@@ -887,6 +948,8 @@ function applyLang(){
   document.getElementById("lang-zh").setAttribute("aria-pressed", lang==="zh");
   applyLang2();
   if (window.V3READY) applyLang3();
+  if (window.V3READY && window.SCEN) renderScen();
+  if (window.V3READY && window.VAL) renderVal();
   render();
 }
 
@@ -1776,6 +1839,261 @@ function runDemo(){
   $("phase").addEventListener("input", syncPlay);
   syncPlay();
 })();
+
+// ---- v3.2: field-checked scenarios (each: real in spaceflight per a public agency source, and what this page actually does) ----
+var SCEN = {
+  en: {
+    title:"Field-checked scenarios",
+    intro:"We kept only scenarios that (a) are documented in public NASA sources and (b) this page actually helps with today. Each row says what the tool does and where it stops.",
+    heads:["Scenario","Real? (source)","How Calm Signal helps","Limits"],
+    rows:[
+      ["S1","Short sleep in flight","Yes. NASA reports crews average about 6 h of sleep per night on orbit, with circadian misalignment.","NASA HRR sleep risk","https://humanresearchroadmap.nasa.gov/Risks/risk.aspx?i=100",
+        "Flags sleep ≤ 5.0 h or ≥ 1.5 h below the crew member's own days 1–3 average, prints the rule, offers \"Protect a rest or sleep block\".",
+        "Sleep hours are entered or imported (simulated in the demo); no actigraphy; thresholds are illustrative, not clinical."],
+      ["S2","Mood decline in isolation","Yes. NASA lists isolation and confinement as a hazard; subclinical mood and anxiety disturbances have occurred in flight.","NASA behavioral health risk","https://www.nasa.gov/directorates/esdmd/hhp/behavioral-health-risk/",
+        "Self-reported mood ≤ 2/5 raises a cue with its rule; the crew can log a note or request a ground discussion.",
+        "One self-report item, not a psychological assessment; no diagnosis."],
+      ["S3","Heart rate / blood pressure shifts","Yes. NASA's cardiovascular risk covers deconditioning, rhythm problems and low blood pressure on return to gravity.","NASA cardiovascular risk","https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+        "Flags heart rate ≥ own baseline + 15 bpm and systolic ≥ baseline + 12 mm Hg; radar shows today vs. baseline.",
+        "Spot values only; no ECG, no arrhythmia or clot detection."],
+      ["S4","Radiation environment","Yes. NASA calls space radiation one of the most hazardous aspects of spaceflight.","NASA 5 hazards + OSDR RadLab","https://www.nasa.gov/hrp/hazards/",
+        "Shows real ISS DosTel1 dose-rate data (2022) beside the crew's day and an approximate 14-day total, labeled as an estimate.",
+        "Instrument environment data, not a personal dose; historical file; no solar-event alerting."],
+      ["S5","Comms delay or blackout","Yes. NASA: Mars one-way delay up to about 20–22 min; medical concept of operations expects onboard decision support and possible 2-week blackouts.","NASA Distance from Earth","https://www.nasa.gov/hrp/hazard-distance-from-earth/",
+        "Runs entirely in the browser; rules and the rule-based summary need no network; the optional AI only calls a local endpoint. Blackout toggle shows this.",
+        "Does not replace a flight surgeon or physician astronaut; any local-model text is a draft."],
+      ["S6","Splashdown medical handoff","Yes. NASA: after splashdown, medical professionals on the recovery ship do initial checks; rescue teams can airlift crew for further care.","NASA crew rescue and recovery","https://www.nasa.gov/humans-in-space/nasas-spacex-crew-rescue-and-recovery/",
+        "Builds one HL7 FHIR R4 Bundle (vitals with LOINC codes, cues with rule text, last crew decision) addressed to sea, air and ground teams; downloadable JSON.",
+        "Simulated: nothing is sent; not connected to any recovery system; not validated against a specific FHIR implementation guide."]
+    ],
+    note:"Dropped: blood sugar and body temperature as standalone scenarios. They stay as indicators because the challenge page lists them, but we did not tie them to a verified in-flight scenario here."
+  },
+  zh: {
+    title:"已查證的真實情境",
+    intro:"只保留同時符合兩點的情境：(a) NASA 公開資料有記載；(b) 本頁現在真的能幫上忙。每一列都寫出工具做了什麼，以及做不到什麼。",
+    heads:["情境","真的會發生？（出處）","Calm Signal 怎麼幫","限制"],
+    rows:[
+      ["S1","飛行中睡眠不足","是。NASA 指出太空人在軌平均每晚約睡 6 小時，且有晝夜節律錯位。","NASA HRR 睡眠風險","https://humanresearchroadmap.nasa.gov/Risks/risk.aspx?i=100",
+        "睡眠 ≤ 5.0 小時，或比本人第 1–3 日平均少 ≥ 1.5 小時時提醒，列出規則，並提供「安排休息或睡眠時段」選項。",
+        "睡眠時數為輸入或匯入（示範中為模擬）；沒有活動記錄器；門檻為示範用，非臨床標準。"],
+      ["S2","隔離下情緒低落","是。NASA 將隔離與封閉列為危害之一；飛行中曾出現亞臨床的情緒與焦慮困擾。","NASA 行為健康風險","https://www.nasa.gov/directorates/esdmd/hhp/behavioral-health-risk/",
+        "自評情緒 ≤ 2/5 時提醒並附規則；太空人可留下紀錄或請求與地面討論。",
+        "只有一題自評，不是心理評估，也不做診斷。"],
+      ["S3","心率／血壓變化","是。NASA 心血管風險涵蓋失調、心律問題，以及返回重力後的低血壓。","NASA 心血管風險","https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+        "心率 ≥ 本人基準 + 15 bpm、收縮壓 ≥ 基準 + 12 mm Hg 時提醒；雷達圖顯示今日與基準的比較。",
+        "只有單點數值；沒有心電圖，無法偵測心律不整或血栓。"],
+      ["S4","輻射環境","是。NASA 指出太空輻射是太空飛行最危險的面向之一。","NASA 五大危害 + OSDR RadLab","https://www.nasa.gov/hrp/hazards/",
+        "在太空人當日資料旁顯示真實的 ISS DosTel1 劑量率（2022），以及標明為估計值的 14 日總量。",
+        "這是儀器環境資料，不是個人劑量；為歷史檔案；沒有太陽事件警報。"],
+      ["S5","通訊延遲或中斷","是。NASA：火星單程延遲最長約 20–22 分鐘；醫療運作概念預期需要機上決策輔助，且可能有長達 2 週的通訊中斷。","NASA 遠離地球","https://www.nasa.gov/hrp/hazard-distance-from-earth/",
+        "完全在瀏覽器中執行；規則與規則式摘要不需網路；可選的 AI 只呼叫本機端點。通訊中斷開關可示範。",
+        "不能取代飛行醫師或醫師太空人；本機模型的文字僅為草稿。"],
+      ["S6","濺落後醫療交接","是。NASA：濺落後，回收船上的醫療人員進行初步檢查；救援團隊可空運太空人接受進一步照護。","NASA 太空人救援與回收","https://www.nasa.gov/humans-in-space/nasas-spacex-crew-rescue-and-recovery/",
+        "產生一份 HL7 FHIR R4 Bundle（含 LOINC 編碼的生理數值、附規則的提醒、最後一次太空人決定），對象為海、空、陸團隊；可下載 JSON。",
+        "模擬：不會傳送；未連接任何救援系統；未依特定 FHIR 實作指引驗證。"]
+    ],
+    note:"已刪除：血糖與體溫作為獨立情境。因題目頁列出，仍保留為指標，但本頁未將其對應到已查證的飛行情境。"
+  }
+};
+function renderScen(){
+  var t = SCEN[lang];
+  $("t-scen").textContent = t.title;
+  $("scen-intro").textContent = t.intro;
+  t.heads.forEach(function(h,i){ $("sh-"+(i+1)).textContent = h; });
+  $("scen-body").innerHTML = t.rows.map(function(r){
+    return "<tr><td><span>"+r[0]+"</span>"+r[1]+"</td>"
+      + "<td data-h='"+t.heads[1]+"'>"+r[2]+" <a href='"+r[4]+"' target='_blank' rel='noopener'>"+r[3]+"</a></td>"
+      + "<td data-h='"+t.heads[2]+"'>"+r[5]+"</td>"
+      + "<td class='lim' data-h='"+t.heads[3]+"'>"+r[6]+"</td></tr>";
+  }).join("");
+  $("scen-note").textContent = t.note;
+}
+renderScen();
+// ---- v3.2: validation status + live self-test (same tests run in Node: tests/run-tests.mjs) ----
+var BUILD = { version: "v3.2", commit: "df8d6c7+", date: "2026-11-15" };
+var RAW_SHA256 = "785e526aee3b07f71ffb235f9f7d22bc686765c0eab9ff6f6fc043c00929c57c"; // from data/radlab/SOURCES.md
+var VAL = {
+  en: {
+    title:"Validation status & live self-test",
+    okH:"Verified (software checks, run live below)",
+    ok:["Rule engine gives the expected cues on known inputs","FHIR R4 Bundle structure, LOINC codes and references","RadLab data: embedded daily table matches the 14-day file; raw file SHA-256 matches SOURCES.md (hosted page or Node)","No external network requests; no third-party scripts","CSV import accepts valid files and rejects malformed ones"],
+    noH:"Not verified",
+    no:["Clinical validation or accuracy of any threshold","Use with real crew or real sensors","Conformance to a specific FHIR implementation guide","Medical-device certification (none claimed)"],
+    run:"Run self-test", running:"Running…",
+    sum:function(p,f,k,ts){ return p+" pass · "+f+" fail · "+k+" skipped · "+ts; },
+    note:"Same tests run in Node: node tests/run-tests.mjs. Skipped = cannot run in this context (e.g. file:// blocks reading data files); never counted as pass.",
+    prov:"Data provenance: NASA OSDR RadLab public API, ISS DosTel1 absorbed_dose_rate, 2022-03-19 to 2022-04-01 UTC, fetched 2026-11-14; request URL and SHA-256 in data/radlab/SOURCES.md. Vital signs, sleep and mood are a simulated session.",
+    changelog:"Changelog"
+  },
+  zh: {
+    title:"驗證狀態與即時自我測試",
+    okH:"已驗證（軟體檢查，下方即時執行）",
+    ok:["規則引擎對已知輸入產生預期的提醒","FHIR R4 Bundle 結構、LOINC 編碼與引用","RadLab 資料：內嵌每日表與 14 日檔案一致；原始檔 SHA-256 與 SOURCES.md 相符（線上頁面或 Node）","沒有外部網路請求；沒有第三方程式","CSV 匯入接受正確檔案、拒絕格式錯誤的檔案"],
+    noH:"未驗證",
+    no:["任何門檻的臨床驗證或準確度","實際太空人或真實感測器的使用","特定 FHIR 實作指引的符合性","醫療器材認證（未宣稱）"],
+    run:"執行自我測試", running:"執行中…",
+    sum:function(p,f,k,ts){ return p+" 通過 · "+f+" 失敗 · "+k+" 略過 · "+ts; },
+    note:"同一組測試可在 Node 執行：node tests/run-tests.mjs。「略過」代表在此環境無法執行（例如 file:// 無法讀取資料檔），不會算成通過。",
+    prov:"資料來源：NASA OSDR RadLab 公開 API，ISS DosTel1 absorbed_dose_rate，2022-03-19 至 2022-04-01 UTC，2026-11-14 擷取；請求網址與 SHA-256 見 data/radlab/SOURCES.md。生理數值、睡眠與情緒為模擬時段。",
+    changelog:"更新紀錄"
+  }
+};
+
+async function CS_TESTS(env){
+  env = env || {};
+  var out = [];
+  function rec(id, name, status, detail){ out.push({id:id, name:name, status:status, detail:detail||""}); }
+  function check(id, name, fn){ try { var r = fn(); rec(id, name, r === true ? "pass" : "fail", r === true ? "" : String(r)); } catch(e){ rec(id, name, "fail", e && e.message || String(e)); } }
+
+  // T1 rule engine on known inputs (temporarily swaps the session, then restores it)
+  var saved = rows;
+  try {
+    var base = {sys:120, dia:78, hr:70, glu:95, temp:36.7, sleep:7.5, mood:4};
+    var mk = function(over){ var r = [1,2,3].map(function(d){ return Object.assign({day:d}, base); }); r.push(Object.assign({day:4}, base, over)); return r; };
+    var cases = [
+      [{}, []], [{sleep:4.8}, ["sleepLow"]], [{sleep:6.0}, ["sleepLow"]], [{sleep:6.1}, []],
+      [{mood:2}, ["moodLow"]], [{mood:3}, []], [{hr:85}, ["hrUp"]], [{hr:84}, []],
+      [{sys:132}, ["sysUp"]], [{sys:131}, []], [{glu:120}, ["gluShift"]], [{glu:70}, ["gluShift"]], [{glu:119}, []],
+      [{temp:37.5}, ["tempHigh"]], [{temp:37.4}, []], [{sleep:4.5, mood:2, hr:90}, ["sleepLow","moodLow","hrUp"]]
+    ];
+    var bad = [];
+    cases.forEach(function(c){ rows = mk(c[0]); var got = flagsFor(rows[3]).slice().sort().join(","); var exp = c[1].slice().sort().join(","); if (got !== exp) bad.push(JSON.stringify(c[0])+" → ["+got+"] expected ["+exp+"]"); });
+    rec("T1", "Rule engine: " + cases.length + " known-input cases", bad.length ? "fail" : "pass", bad.join("; "));
+    rows = mk({sleep:4.5}); var why = ruleDetail("sleepLow", rows[3]);
+    rec("T1b", "Every cue prints its rule text", /4\.5 h/.test(why) && /5\.0 h/.test(why) ? "pass" : "fail", why);
+  } catch(e){ rec("T1", "Rule engine", "fail", e.message); }
+  finally { rows = saved; }
+
+  // T2 FHIR bundle structure
+  check("T2", "FHIR R4 Bundle: structure, LOINC vitals, references, SIMULATED tag", function(){
+    var b = JSON.parse(JSON.stringify(buildFhirBundle()));
+    if (b.resourceType !== "Bundle" || b.type !== "collection") return "not a collection Bundle";
+    if (!Array.isArray(b.entry) || !b.entry.length) return "no entries";
+    var pts = b.entry.filter(function(e){ return e.resource && e.resource.resourceType === "Patient"; });
+    if (pts.length !== 1) return "expected 1 Patient";
+    var pid = "Patient/" + pts[0].resource.id;
+    var need = ["8480-6","8462-4","8867-4","2339-0","8310-5","93832-4"], have = {};
+    for (var i=0;i<b.entry.length;i++){
+      var r = b.entry[i].resource;
+      if (!r || !r.resourceType) return "entry "+i+" has no resourceType";
+      if (!b.entry[i].fullUrl) return "entry "+i+" has no fullUrl";
+      if (r.resourceType !== "Patient" && (!r.subject || r.subject.reference !== pid)) return r.resourceType+" subject is not "+pid;
+      if (r.resourceType === "Observation"){
+        if (r.status !== "final") return "Observation status";
+        (r.code.coding||[]).forEach(function(c){ if (c.system === "http://loinc.org") have[c.code] = true; });
+        if (r.valueQuantity && r.valueQuantity.system !== "http://unitsofmeasure.org") return "valueQuantity not UCUM";
+      }
+    }
+    var miss = need.filter(function(c){ return !have[c]; });
+    if (miss.length) return "missing LOINC " + miss.join(",");
+    var comm = b.entry.filter(function(e){ return e.resource.resourceType === "Communication"; }).length;
+    if (comm !== 3) return "expected 3 Communication (sea/air/ground), got " + comm;
+    if (!b.meta || !b.meta.tag || b.meta.tag[0].code !== "SIMULATED") return "missing SIMULATED tag";
+    return true;
+  });
+
+  // T3 RadLab embedded table
+  check("T3", "RadLab daily table: 14 consecutive UTC days, 16,802 readings, sane stats", function(){
+    if (RADIATION_DAILY.length !== 14) return "rows " + RADIATION_DAILY.length;
+    var t0 = Date.UTC(2022,2,19), n = 0;
+    for (var i=0;i<14;i++){
+      var r = RADIATION_DAILY[i], d = new Date(t0 + i*864e5).toISOString().slice(0,10);
+      if (r.utc_date !== d) return "date " + r.utc_date + " expected " + d;
+      if (r.demo_day !== i+1) return "demo_day";
+      if (!(r.min_uGy_per_h <= r.median_uGy_per_h && r.median_uGy_per_h <= r.max_uGy_per_h && r.min_uGy_per_h <= r.mean_uGy_per_h && r.mean_uGy_per_h <= r.max_uGy_per_h)) return "min/median/mean/max order on " + d;
+      n += r.n_samples;
+    }
+    return n === 16802 ? true : "total readings " + n;
+  });
+  // T3b/T3c data files (need file access)
+  if (env.readText && env.sha256){
+    try {
+      var daily = JSON.parse(await env.readText("data/radlab/iss_dostel1_daily.json"));
+      var arr = Array.isArray(daily) ? daily : (daily.days || daily.data || []);
+      var mism = [];
+      RADIATION_DAILY.forEach(function(r,i){ var f = arr[i] || {}; ["n_samples","mean_uGy_per_h","median_uGy_per_h","min_uGy_per_h","max_uGy_per_h"].forEach(function(k){ if (Math.abs((+f[k]) - r[k]) > 1e-9) mism.push(r.utc_date+" "+k); }); });
+      rec("T3b", "Embedded table equals data/radlab/iss_dostel1_daily.json", mism.length ? "fail" : "pass", mism.slice(0,4).join("; "));
+    } catch(e){ rec("T3b", "Embedded table equals data/radlab/iss_dostel1_daily.json", "skip", "cannot read data file here: " + (e.message||e)); }
+    try {
+      var h = await env.sha256("data/radlab/iss_dostel1_20220319_20220402.csv");
+      var src = await env.readText("data/radlab/SOURCES.md");
+      if (src.indexOf(RAW_SHA256) < 0) h = "SOURCES.md does not list " + RAW_SHA256;
+      rec("T3c", "Raw RadLab CSV SHA-256 matches SOURCES.md", h === RAW_SHA256 ? "pass" : "fail", h.slice(0,16) + "… vs " + RAW_SHA256.slice(0,16) + "…");
+    } catch(e){ rec("T3c", "Raw RadLab CSV SHA-256 matches SOURCES.md", "skip", "cannot read data file here: " + (e.message||e)); }
+  } else {
+    rec("T3b", "Embedded table equals data/radlab/iss_dostel1_daily.json", "skip", "no file access in this context");
+    rec("T3c", "Raw RadLab CSV SHA-256 matches SOURCES.md", "skip", "no file access in this context");
+  }
+
+  // T4 offline / no third-party network
+  check("T4", "No third-party scripts, styles or network requests (optional on-device AI on localhost allowed)", function(){
+    if (env.offlineCheck) return env.offlineCheck();
+    var ext = [];
+    document.querySelectorAll("script[src],link[href],img[src],iframe[src]").forEach(function(el){ var u = el.getAttribute("src") || el.getAttribute("href"); if (/^(https?:)?\/\//i.test(u)) ext.push(u); });
+    var res = (performance.getEntriesByType ? performance.getEntriesByType("resource") : []).filter(function(e){ try { var u = new URL(e.name, location.href); return u.origin !== location.origin && !/^(localhost|127\.0\.0\.1)$/.test(u.hostname); } catch(_){ return false; } }).map(function(e){ return e.name; });
+    var all = ext.concat(res);
+    return all.length ? "external: " + all.slice(0,3).join(", ") : true;
+  });
+
+  // T5 CSV import validation
+  check("T5", "CSV import: valid file parsed, malformed file rejected", function(){
+    var ok = parseCsv("day,sys,dia,hr,glu,temp,sleep,mood\n2,118,76,66,92,36.6,7.1,4\n1,120,78,70,95,36.7,7.5,4\n");
+    if (ok.length !== 2 || ok[0].day !== 1 || ok[1].hr !== 66 || ok[1].temp !== 36.6) return "valid CSV parsed wrong";
+    var threw = false; try { parseCsv("day,sys\n1,120\n"); } catch(e){ threw = true; }
+    if (!threw) return "malformed CSV was accepted";
+    return true;
+  });
+  return out;
+}
+
+function browserEnv(){
+  if (location.protocol === "file:") return {};
+  return {
+    readText: function(p){ return fetch(p, {cache:"no-store"}).then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); }); },
+    sha256: function(p){
+      if (!(window.crypto && crypto.subtle)) return Promise.reject(new Error("crypto.subtle unavailable"));
+      return fetch(p, {cache:"no-store"}).then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.arrayBuffer(); })
+        .then(function(buf){ return crypto.subtle.digest("SHA-256", buf); })
+        .then(function(d){ return Array.from(new Uint8Array(d)).map(function(x){ return x.toString(16).padStart(2,"0"); }).join(""); });
+    }
+  };
+}
+function renderVal(){
+  var t = VAL[lang];
+  $("t-val").textContent = t.title;
+  $("vb-ok-h").textContent = t.okH; $("vb-no-h").textContent = t.noH;
+  $("vb-ok").innerHTML = t.ok.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+  $("vb-no").innerHTML = t.no.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+  $("build").innerHTML = "<span>BUILD <b>" + BUILD.version + "</b></span><span>COMMIT <b>" + BUILD.commit + "</b></span><span>DATE <b>" + BUILD.date + "</b></span>"
+    + "<span><a href='CHANGELOG.md' target='_blank' rel='noopener'>" + t.changelog + "</a></span><span><a href='tests/run-tests.mjs' target='_blank' rel='noopener'>tests/run-tests.mjs</a></span>";
+  $("prov").textContent = t.prov;
+  $("st-note").textContent = t.note;
+  $("btn-selftest").textContent = t.run;
+  if (window.LAST_ST) showSelfTest(window.LAST_ST.res, window.LAST_ST.ts);
+}
+function showSelfTest(res, ts){
+  var t = VAL[lang];
+  var p = res.filter(function(r){ return r.status === "pass"; }).length, f = res.filter(function(r){ return r.status === "fail"; }).length, k = res.length - p - f;
+  $("st-sum").textContent = t.sum(p, f, k, ts);
+  $("st-list").innerHTML = res.map(function(r){
+    var lab = r.status === "pass" ? "PASS" : r.status === "fail" ? "FAIL" : "SKIP";
+    return "<li><span class='st " + r.status + "'>" + lab + "</span><span><b>" + r.id + "</b> " + r.name + (r.detail ? "<span class='d'>" + String(r.detail).replace(/</g,"&lt;") + "</span>" : "") + "</span></li>";
+  }).join("");
+}
+function runSelfTest(){
+  var btn = $("btn-selftest"); btn.disabled = true; btn.textContent = VAL[lang].running;
+  return CS_TESTS(browserEnv()).then(function(res){
+    var ts = new Date().toISOString().replace("T"," ").slice(0,19) + " UTC";
+    window.LAST_ST = {res: res, ts: ts};
+    showSelfTest(res, ts);
+  }).finally(function(){ btn.disabled = false; btn.textContent = VAL[lang].run; });
+}
+if (typeof document !== "undefined" && document.getElementById("btn-selftest")){
+  $("btn-selftest").addEventListener("click", runSelfTest);
+  renderVal();
+  if (!window.CS_NODE) setTimeout(runSelfTest, 600);
+}
+window.CS_TESTS = CS_TESTS;
 </script>
 </body>
 </html>

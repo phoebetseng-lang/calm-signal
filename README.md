@@ -18,6 +18,26 @@ This is a decision-support demo, not a medical device. It does not diagnose, tre
 - Official NASA HRP hazard short descriptions and challenge-listed partner pages, quoted with links.
 - Optional CSV import of another local simulated session (`data/sample-session.csv`).
 
+## Testing and validation (v3.2)
+
+The app runs a live **self-test** (panel QA-01) when it opens, and again with **Run self-test**. Each check shows PASS, FAIL or SKIP with a UTC timestamp. SKIP means the check could not run in that context (for example a browser opened from `file://` cannot read the data files); it is never counted as a pass.
+
+Run the same suite from a terminal (Node 18+, no install):
+
+```
+node tests/run-tests.mjs
+```
+
+| ID | What it checks |
+|---|---|
+| T1 / T1b | Rule engine gives the expected cues on 16 known inputs (each threshold edge); every cue prints its rule |
+| T2 | FHIR R4 Bundle: structure, six LOINC vital-sign codes, UCUM units, subject references, 3 recovery Communications, SIMULATED tag |
+| T3 / T3b / T3c | RadLab table has 14 consecutive UTC days and 16,802 readings; equals `data/radlab/iss_dostel1_daily.json`; raw CSV SHA-256 equals `data/radlab/SOURCES.md` |
+| T4 | No third-party scripts, styles or network requests (optional on-device AI on localhost is allowed) |
+| T5 | CSV import accepts a valid file and rejects a malformed one |
+
+**Verified:** the software checks above. **Not verified:** clinical validity of any threshold, use with real crew or sensors, conformance to a specific FHIR implementation guide. No medical-device certification is claimed. See [CHANGELOG.md](CHANGELOG.md).
+
 ## Visual identity (v3.1)
 
 A flight-deck / mission-ops instrument style: graphite panels on an engineering grid, phosphor teal for nominal and sodium amber for alerts and signal, monospaced tabular telemetry numerals, condensed uppercase labels, hairline rules with corner ticks, panel IDs (CS-01…), an inline-SVG wordmark, and motion tied to data only (orbit, replay feed, tickers, FHIR packets, a scanning line while the local AI runs).
