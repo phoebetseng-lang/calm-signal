@@ -18,6 +18,18 @@ This is a decision-support demo, not a medical device. It does not diagnose, tre
 - Official NASA HRP hazard short descriptions and challenge-listed partner pages, quoted with links.
 - Optional CSV import of another local simulated session (`data/sample-session.csv`).
 
+## What's new (v2)
+
+- **On-device AI, crew medical focus.** A header panel states the two themes: health review runs on the crew's own device, and the optional Local AI Summary goes only to a local endpoint the user sets (default `localhost`). If no local model answers, a rule-based summary is shown instead, so the page still works with no link to Earth. Mars one-way signal delay can exceed 20 minutes, which is why decisions cannot wait for Earth.
+- **Explainable cues.** Every "Needs a closer look" item now shows the exact rule and the values that triggered it.
+- **Crew status at a glance.** Today's number of review cues (simulated session), today's DosTel1 median dose rate, and an approximate 14-day mission dose computed in the page as the sum of RadLab daily mean dose rates × 24 h (an estimate from the real public data, not an official or personal dose).
+- **"How on-device AI works" panel** with a clearly labeled roadmap line. Wearables, multimodal sensing, and tested on-board models are future work, not part of this prototype.
+- **Return & recovery medical handoff (FHIR), simulated demo.** Builds an HL7 FHIR R4 Bundle on the device (Patient, vital-sign Observations with LOINC codes, the RadLab context Observation, Flags carrying the rule text, and Communication resources addressed to simulated sea, air, and ground recovery medical teams) and lets you download it as JSON. Nothing is sent. The page is not connected to any real recovery or emergency system.
+
+## About the team
+
+Team developers received a 2026 SMART on FHIR national Top 50 award and took part in the 2026 Taiwan Connectathon (FHIR interoperability testing).
+
 ## How to run
 
 No install and no web server are required for the built-in demo.

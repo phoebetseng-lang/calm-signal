@@ -108,6 +108,58 @@
     #rad-chart { width: 100%; height: 120px; display: block; background: var(--bg2); border-radius: 8px; }
     #btn-ai { width: 100%; margin-top: 8px; }
     .hidden { display: none; }
+
+    /* ---- v2 polish: mission-control look ---- */
+    body { background: radial-gradient(1200px 600px at 70% -10%, #0f3440 0%, rgba(7,19,26,0) 60%), var(--bg); }
+    header.app { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(6px); box-shadow: 0 2px 18px rgba(0,0,0,.35); }
+    .logo::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+      background: var(--teal); margin-right: 10px; box-shadow: 0 0 0 0 rgba(60,184,176,.7); animation: pulse 2.4s infinite; vertical-align: middle; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(60,184,176,.6); } 70% { box-shadow: 0 0 0 10px rgba(60,184,176,0); } 100% { box-shadow: 0 0 0 0 rgba(60,184,176,0); } }
+    @media (prefers-reduced-motion: reduce) { .logo::before { animation: none; } }
+    section.card { background: linear-gradient(180deg, #12303b 0%, var(--card) 60%); box-shadow: 0 6px 22px rgba(0,0,0,.25);
+      transition: border-color .2s; margin-bottom: 16px; }
+    section.card:hover { border-color: #2c6470; }
+    main > div > section.card:last-child { margin-bottom: 0; }
+    h2 { display: flex; align-items: center; gap: 8px; }
+    h2::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: var(--teal); }
+    .metric .v, .rad-stats .metric .v, .ribbon .v { font-variant-numeric: tabular-nums; }
+    .hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; padding: 16px 20px 0; }
+    @media (max-width: 1100px) { .hero { grid-template-columns: 1fr; } }
+    .hero-main { background: linear-gradient(120deg, #0f3a44, #0c2430 70%); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+    .hero-main .tagline { font-size: 22px; font-weight: 700; color: #fff; margin: 6px 0 6px; line-height: 1.25; }
+    .hero-main .lede { color: var(--muted); font-size: 13.5px; margin: 0; }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .03em; border: 1px solid; }
+    .pill.ai { color: #9ee0d8; border-color: #2a7a74; background: #0f3a38; }
+    .pill.med { color: #ffc9bb; border-color: #8a4a3c; background: #3a1d17; }
+    .pill.xai { color: #d7d0ff; border-color: #5a4f9a; background: #221d3d; }
+    .pill.hitl { color: #c9f0c9; border-color: #3f7a3f; background: #16301a; }
+    .pill.priv { color: #f0d48a; border-color: #7a6420; background: #33290f; }
+    .ribbon { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 700px) { .ribbon { grid-template-columns: 1fr 1fr; } }
+    .ribbon .cell { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+    .ribbon .k { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .ribbon .v { font-size: 20px; font-weight: 700; line-height: 1.2; }
+    .ribbon .u { font-size: 11px; color: var(--muted); }
+    .ribbon .cell.flag .v { color: var(--alert); }
+    .ribbon .cell.ok .v { color: var(--ok); }
+    .ribbon-note { font-size: 11.5px; color: var(--muted); margin: 6px 0 0; }
+    .steps { list-style: none; margin: 8px 0 0; padding: 0; counter-reset: st; display: flex; flex-direction: column; gap: 6px; }
+    .steps li { counter-increment: st; position: relative; padding: 6px 8px 6px 34px; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; font-size: 12.5px; }
+    .steps li::before { content: counter(st); position: absolute; left: 8px; top: 6px; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--teal2); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+    .flags li .why { display: block; margin-top: 4px; font-size: 11.5px; color: #e8b9ab; font-family: ui-monospace, "DejaVu Sans Mono", monospace; }
+    .fhir-box { margin-top: 8px; max-height: 220px; overflow: auto; background: #061015; border: 1px solid var(--line); border-radius: 8px;
+      padding: 8px; font: 11.5px/1.4 ui-monospace, "DejaVu Sans Mono", monospace; color: #bfe6e2; white-space: pre; }
+    .notify { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+    .notify .n { background: var(--bg2); border: 1px dashed #6a5420; border-radius: 8px; padding: 6px 8px; font-size: 12px; text-align: center; }
+    .notify .n b { display: block; color: #f0d48a; font-size: 12px; }
+    .btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .roadmap { font-size: 12px; color: var(--muted); border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
+    .team-cred { font-size: 12.5px; }
+    main > div { min-width: 0; }
+    input[type=text] { background: #061015; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font: 13px ui-monospace, "DejaVu Sans Mono", monospace; }
+    input[type=text]:focus { outline: 2px solid var(--teal2); }
   </style>
 </head>
 <body>
@@ -126,6 +178,23 @@
     <span class="badge sim" id="badge-sim">SIMULATED SESSION</span>
     <span id="source-note"></span>
   </div>
+  <section class="hero" aria-label="Overview">
+    <div class="hero-main">
+      <div class="pills">
+        <span class="pill ai" id="pill-ai">ON-DEVICE AI</span>
+        <span class="pill med" id="pill-med">CREW MEDICAL</span>
+        <span class="pill xai" id="pill-xai">EXPLAINABLE RULES</span>
+        <span class="pill hitl" id="pill-hitl">CREW DECIDES</span>
+        <span class="pill priv" id="pill-priv">PRIVACY BY DESIGN</span>
+      </div>
+      <p class="tagline" id="hero-tag"></p>
+      <p class="lede" id="hero-lede"></p>
+    </div>
+    <div class="hero-main">
+      <div class="ribbon" id="ribbon"></div>
+      <p class="ribbon-note" id="ribbon-note"></p>
+    </div>
+  </section>
   <main>
     <div>
       <section class="card">
@@ -185,6 +254,23 @@
           <ul id="ai-options"></ul>
         </div>
       </section>
+      <section class="card" id="how-ai">
+        <h2 id="t-howai">How on-device AI works</h2>
+        <ol class="steps" id="howai-steps"></ol>
+        <p class="roadmap" id="roadmap"></p>
+      </section>
+      <section class="card" id="fhir-panel">
+        <h2 id="t-fhir">Return &amp; recovery medical handoff (FHIR)</h2>
+        <span class="badge sim" id="fhir-badge">SIMULATED DEMO</span>
+        <p class="muted" id="fhir-help"></p>
+        <div class="notify" id="fhir-notify"></div>
+        <div class="btn-row">
+          <button type="button" class="primary" id="btn-fhir">Build FHIR handoff</button>
+          <button type="button" id="btn-fhir-dl" disabled>Download JSON</button>
+        </div>
+        <p id="fhir-status" class="muted"></p>
+        <div class="fhir-box hidden" id="fhir-out" aria-live="polite"></div>
+      </section>
     </div>
     <div>
       <section class="card">
@@ -203,6 +289,10 @@
       <section class="card">
         <h2 id="t-partners">Partner resources</h2>
         <div id="partners" class="muted"></div>
+      </section>
+      <section class="card" id="about-team">
+        <h2 id="t-team">About the team</h2>
+        <p class="muted team-cred" id="team-cred"></p>
       </section>
     </div>
   </main>
@@ -381,6 +471,58 @@ const T = {
   }
 };
 
+const T2 = {
+  en: {
+    pills:["ON-DEVICE AI","CREW MEDICAL","EXPLAINABLE RULES","CREW DECIDES","PRIVACY BY DESIGN"],
+    heroTag:"Crew medical self-review that keeps working when Earth is minutes away.",
+    heroLede:"On Moon and Mars missions, a reply from Earth can take minutes (Mars one-way signal delay can exceed 20 minutes) or be cut off entirely. Calm Signal runs in the browser on the crew's own device: transparent rules flag changes in health indicators, an optional small language model on a local endpoint drafts a plain-language summary, and the crew member, together with the flight surgeon when a link is available, decides. Decision support only; not a diagnosis and not clinically validated.",
+    ribbon:{flags:"Review cues today", flagsU:"transparent rules", dose:"Mission dose, 14 days", doseU:"µGy, approx. (DosTel1 daily mean rate × 24 h)", today:"Dose-rate median today", todayU:"µGy/h · ISS DosTel1", net:"Network needed", netV:"None", netU:"page runs offline; AI only to your local endpoint"},
+    ribbonNote:"Review cues come from the SIMULATED SESSION. Dose figures come from real NASA OSDR RadLab ISS DosTel1 data (19 Mar–1 Apr 2022); the 14-day total is an estimate computed in this page, not an official dose and not a personal dose.",
+    howTitle:"How on-device AI works",
+    steps:[
+      "Indicators are checked by fixed, readable rules in this page. Every cue shows the rule and the values that triggered it (explainable, no black box).",
+      "Only when you click Local AI Summary, the day's values and the RadLab figures are sent to the endpoint you typed (default: a model server on this computer, e.g. localhost). No cloud account, no telemetry from this page.",
+      "A small language model on that local endpoint drafts a short summary and options. If no local model answers, the page falls back to a rule-based summary, so it still works with no link to Earth.",
+      "The crew member chooses the next step and it is logged on this device only. The AI suggests; the crew decides."
+    ],
+    roadmap:"Roadmap (future work, not in this prototype): wearable and multimodal sensor input, and tested small on-board models for spacecraft hardware.",
+    fhirTitle:"Return & recovery medical handoff (FHIR)",
+    fhirBadge:"SIMULATED DEMO",
+    fhirHelp:"For splashdown or landing: build a standard HL7 FHIR R4 Bundle (Patient, Observations, Flags, Communication) from the selected day so sea, air and ground recovery medical teams could receive the same structured handoff. Demo only: nothing is sent anywhere, and this page is not connected to any real recovery or emergency system. The data are the simulated session plus RadLab context.",
+    notify:[["Sea","recovery ship medical team"],["Air","helicopter / medevac crew"],["Ground","landing-site medical team"]],
+    notifyNote:"simulated recipient, not contacted",
+    btnFhir:"Build FHIR handoff", btnDl:"Download JSON",
+    fhirDone:(n)=>"Built a FHIR R4 Bundle with "+n+" resources on this device. Nothing was sent.",
+    teamTitle:"About the team",
+    teamCred:"Team developers received a 2026 SMART on FHIR national Top 50 award and took part in the 2026 Taiwan Connectathon (FHIR interoperability testing). That interoperability experience shaped the FHIR recovery handoff demo above.",
+    why:"Rule check"
+  },
+  zh: {
+    pills:["地端 AI","太空人醫療","可解釋規則","太空人決定","隱私設計"],
+    heroTag:"地球遠在幾分鐘之外，太空人的醫療自我檢視照樣能運作。",
+    heroLede:"在月球和火星任務中，地球的回覆可能要等好幾分鐘（火星單程訊號延遲可超過 20 分鐘），甚至完全中斷。Calm Signal 在太空人自己的裝置上、以瀏覽器執行：透明規則標出健康指標的變化；可選用本機端點上的小型語言模型撰寫白話摘要；最後由太空人（通訊可用時與飛行醫師一起）決定。僅為決策輔助，不是診斷，也未經臨床驗證。",
+    ribbon:{flags:"今日提醒數", flagsU:"透明規則", dose:"14 日任務劑量", doseU:"µGy，估計值（DosTel1 每日平均劑量率 × 24 小時）", today:"今日劑量率中位數", todayU:"µGy/h · ISS DosTel1", net:"需要網路", netV:"不需要", netU:"頁面可離線；AI 只送往你設定的本機端點"},
+    ribbonNote:"提醒數來自「模擬時段」。劑量數字來自真實的 NASA OSDR RadLab ISS DosTel1 資料（2022-03-19 至 04-01）；14 日總量是本頁計算的估計值，不是官方劑量，也不是個人劑量。",
+    howTitle:"地端 AI 如何運作",
+    steps:[
+      "指標由本頁中固定、可讀的規則檢查。每個提醒都會顯示觸發它的規則和數值（可解釋，不是黑盒子）。",
+      "只有按下「本機 AI 摘要」時，當日數值與 RadLab 數字才會送到你輸入的端點（預設是這台電腦上的模型伺服器，例如 localhost）。不需要雲端帳號，本頁不回傳任何遙測。",
+      "該本機端點上的小型語言模型撰寫簡短摘要與選項。若沒有本機模型回應，頁面會改用規則式摘要，因此與地球斷線時仍可使用。",
+      "由太空人選擇下一步，並只記錄在這台裝置上。AI 提供建議，太空人做決定。"
+    ],
+    roadmap:"未來規劃（本原型尚未實作）：穿戴裝置與多模態感測輸入，以及在太空船硬體上測試過的小型機載模型。",
+    fhirTitle:"返航與救援醫療交接（FHIR）",
+    fhirBadge:"模擬示範",
+    fhirHelp:"用於海上濺落或著陸：以所選日期產生標準 HL7 FHIR R4 Bundle（Patient、Observation、Flag、Communication），讓海、空、陸的救援醫療團隊可以收到同一份結構化交接資料。僅為示範：不會傳送到任何地方，本頁也沒有連接任何真實的救援或緊急系統。資料為模擬時段加上 RadLab 背景資訊。",
+    notify:[["海","回收船醫療團隊"],["空","直升機／空中醫療後送"],["陸","著陸點醫療團隊"]],
+    notifyNote:"模擬對象，未實際聯絡",
+    btnFhir:"產生 FHIR 交接資料", btnDl:"下載 JSON",
+    fhirDone:(n)=>"已在本機產生含 "+n+" 個資源的 FHIR R4 Bundle，沒有傳送任何資料。",
+    teamTitle:"關於團隊",
+    teamCred:"團隊開發者獲得 2026 SMART on FHIR 全國 50 大獎項，並參加 2026 台灣聯測松（FHIR 互通測試）。這些互通經驗促成了上方的 FHIR 返航交接示範。",
+    why:"規則檢查"
+  }
+};
 const KEYS = ["sys","dia","hr","glu","temp","sleep","mood"];
 let lang = "en";
 let rows = SIMULATED.map(r => ({...r}));
@@ -454,6 +596,7 @@ function applyLang(){
   document.getElementById("rad-cite").textContent = t.radCite;
   document.getElementById("lang-en").setAttribute("aria-pressed", lang==="en");
   document.getElementById("lang-zh").setAttribute("aria-pressed", lang==="zh");
+  applyLang2();
   render();
 }
 
@@ -517,7 +660,7 @@ function renderFlags(){
   const fs = flagsFor(row);
   const ul = document.getElementById("flags");
   if (!fs.length){ ul.innerHTML = `<li class="none">${t.noFlags}</li>`; return; }
-  ul.innerHTML = fs.map(id => `<li>${t.flagReasons[id]}</li>`).join("");
+  ul.innerHTML = fs.map(id => `<li>${t.flagReasons[id]}<span class="why">${T2[lang].why}: ${ruleDetail(id,row)}</span></li>`).join("");
 }
 
 function renderActions(){
@@ -589,6 +732,7 @@ function render(){
   renderActions();
   renderLog();
   highlightPart();
+  renderRibbon();
 }
 
 function parseCsv(text){
@@ -807,6 +951,118 @@ document.getElementById("btn-ai").onclick = requestAiSummary;
 renderBody();
 renderHazards();
 applyLang();
-  </script>
+  
+// ---- v2 additions: hero, ribbon, explainable rule detail, FHIR handoff (demo) ----
+function ruleDetail(id, row){
+  const f = (k,d) => meanEarly(k).toFixed(d);
+  switch(id){
+    case "sleepLow": return "sleep " + row.sleep + " h ≤ 5.0 h, or ≤ early-days avg " + f("sleep",1) + " − 1.5 h";
+    case "moodLow": return "mood " + row.mood + "/5 ≤ 2";
+    case "hrUp": return "heart rate " + row.hr + " bpm ≥ early-days avg " + f("hr",0) + " + 15";
+    case "sysUp": return "systolic " + row.sys + " mm Hg ≥ early-days avg " + f("sys",0) + " + 12";
+    case "gluShift": return "|blood sugar " + row.glu + " − early-days avg " + f("glu",0) + "| ≥ 25 mg/dL";
+    case "tempHigh": return "temperature " + row.temp + " °C ≥ 37.5 °C";
+  }
+  return "";
+}
+function missionDoseEstimate(){
+  // approx. absorbed dose (µGy) = sum over days of daily mean dose rate (µGy/h) × 24 h
+  return RADIATION_DAILY.reduce((s,r)=>s + r.mean_uGy_per_h*24, 0);
+}
+function applyLang2(){
+  const t = T2[lang];
+  ["pill-ai","pill-med","pill-xai","pill-hitl","pill-priv"].forEach((id,i)=>{ document.getElementById(id).textContent = t.pills[i]; });
+  document.getElementById("hero-tag").textContent = t.heroTag;
+  document.getElementById("hero-lede").textContent = t.heroLede;
+  document.getElementById("ribbon-note").textContent = t.ribbonNote;
+  document.getElementById("t-howai").textContent = t.howTitle;
+  document.getElementById("howai-steps").innerHTML = t.steps.map(x=>"<li>"+x+"</li>").join("");
+  document.getElementById("roadmap").textContent = t.roadmap;
+  document.getElementById("t-fhir").textContent = t.fhirTitle;
+  document.getElementById("fhir-badge").textContent = t.fhirBadge;
+  document.getElementById("fhir-help").textContent = t.fhirHelp;
+  document.getElementById("fhir-notify").innerHTML = t.notify.map(n=>"<div class='n'><b>"+n[0]+"</b>"+n[1]+"<br><span class='muted' style='font-size:10.5px'>"+t.notifyNote+"</span></div>").join("");
+  document.getElementById("btn-fhir").textContent = t.btnFhir;
+  document.getElementById("btn-fhir-dl").textContent = t.btnDl;
+  document.getElementById("t-team").textContent = t.teamTitle;
+  document.getElementById("team-cred").textContent = t.teamCred;
+}
+function renderRibbon(){
+  const t = T2[lang].ribbon;
+  const row = currentRow();
+  const n = flagsFor(row).length;
+  const r = radiationForDay(day);
+  const dose = missionDoseEstimate();
+  document.getElementById("ribbon").innerHTML =
+    "<div class='cell " + (n ? "flag" : "ok") + "'><div class='k'>" + t.flags + "</div><div class='v'>" + n + "</div><div class='u'>" + t.flagsU + "</div></div>"
+  + "<div class='cell'><div class='k'>" + t.dose + "</div><div class='v'>≈" + Math.round(dose).toLocaleString("en-US") + "</div><div class='u'>" + t.doseU + "</div></div>"
+  + "<div class='cell'><div class='k'>" + t.today + "</div><div class='v'>" + (r ? r.median_uGy_per_h.toFixed(2) : "–") + "</div><div class='u'>" + t.todayU + (r ? " · " + r.utc_date : "") + "</div></div>"
+  + "<div class='cell ok'><div class='k'>" + t.net + "</div><div class='v'>" + t.netV + "</div><div class='u'>" + t.netU + "</div></div>";
+}
+const LOINC = {
+  sys:["8480-6","Systolic blood pressure","mm[Hg]"], dia:["8462-4","Diastolic blood pressure","mm[Hg]"],
+  hr:["8867-4","Heart rate","/min"], glu:["2339-0","Glucose [Mass/volume] in Blood","mg/dL"],
+  temp:["8310-5","Body temperature","Cel"], sleep:["93832-4","Sleep duration","h"]
+};
+let lastBundle = null;
+function buildFhirBundle(){
+  const row = currentRow();
+  const nowIso = new Date().toISOString();
+  const pid = "crew-demo-01";
+  const entries = [];
+  const add = (res) => entries.push({fullUrl:"urn:uuid:"+res.resourceType.toLowerCase()+"-"+entries.length, resource:res});
+  add({resourceType:"Patient", id:pid, meta:{tag:[{system:"urn:calm-signal", code:"SIMULATED", display:"Simulated demo record, not a real person"}]},
+       identifier:[{system:"urn:calm-signal:crew", value:"CREW-DEMO-01"}], active:true});
+  Object.keys(LOINC).forEach(k=>{
+    const [code, display, unit] = LOINC[k];
+    add({resourceType:"Observation", status:"final",
+      category:[{coding:[{system:"http://terminology.hl7.org/CodeSystem/observation-category", code:"vital-signs"}]}],
+      code:{coding:[{system:"http://loinc.org", code, display}]},
+      subject:{reference:"Patient/"+pid}, effectiveDateTime:nowIso,
+      valueQuantity:{value:row[k], unit, system:"http://unitsofmeasure.org", code:unit},
+      note:[{text:"SIMULATED SESSION value, demo day "+row.day+". Not a NASA measurement."}]});
+  });
+  add({resourceType:"Observation", status:"final",
+    code:{text:"Self-reported mood (1–5, 5 = best)"}, subject:{reference:"Patient/"+pid}, effectiveDateTime:nowIso,
+    valueInteger:row.mood, note:[{text:"SIMULATED SESSION value."}]});
+  const r = radiationForDay(day);
+  if (r) add({resourceType:"Observation", status:"final",
+    code:{text:"Spacecraft radiation environment: ISS DosTel1 daily median absorbed dose rate"},
+    subject:{reference:"Patient/"+pid}, effectiveDateTime:r.utc_date,
+    valueQuantity:{value:r.median_uGy_per_h, unit:"uGy/h", system:"http://unitsofmeasure.org", code:"uGy/h"},
+    note:[{text:"Real public NASA OSDR RadLab instrument telemetry (environment context), not a personal dose and not a diagnosis. n="+r.n_samples+"."}]});
+  flagsFor(row).forEach(id=>{
+    add({resourceType:"Flag", status:"active", code:{text:T.en.flagReasons[id]},
+      subject:{reference:"Patient/"+pid}, period:{start:nowIso},
+      extension:[{url:"urn:calm-signal:rule", valueString:ruleDetail(id,row)}]});
+  });
+  const last = logs.length ? logs[0] : null;
+  [["sea","Recovery ship medical team"],["air","Helicopter / medevac crew"],["ground","Landing-site medical team"]].forEach(([k,name])=>{
+    add({resourceType:"Communication", status:"preparation",
+      category:[{text:"Return & recovery medical handoff (SIMULATED DEMO, not sent)"}],
+      subject:{reference:"Patient/"+pid}, recipient:[{display:name+" ("+k+") — simulated recipient"}],
+      payload:[{contentString:"Decision support only, not a diagnosis. Review cues: "+(flagsFor(row).length ? flagsFor(row).map(id=>ruleDetail(id,row)).join("; ") : "none")+". Last crew decision on this device: "+(last ? last.act + " (day " + last.day + ")" : "none logged")+"."}]});
+  });
+  return {resourceType:"Bundle", type:"collection", timestamp:nowIso,
+    meta:{tag:[{system:"urn:calm-signal", code:"SIMULATED", display:"Demo bundle built on-device; not sent to any system"}]},
+    entry:entries};
+}
+document.getElementById("btn-fhir").addEventListener("click", ()=>{
+  lastBundle = buildFhirBundle();
+  const out = document.getElementById("fhir-out");
+  out.textContent = JSON.stringify(lastBundle, null, 2);
+  out.classList.remove("hidden");
+  document.getElementById("btn-fhir-dl").disabled = false;
+  document.getElementById("fhir-status").textContent = T2[lang].fhirDone(lastBundle.entry.length);
+});
+document.getElementById("btn-fhir-dl").addEventListener("click", ()=>{
+  if (!lastBundle) return;
+  const blob = new Blob([JSON.stringify(lastBundle, null, 2)], {type:"application/fhir+json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "calm-signal-fhir-handoff-day"+day+".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+});
+</script>
 </body>
 </html>
