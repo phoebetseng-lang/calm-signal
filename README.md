@@ -121,7 +121,9 @@ A flight-deck / mission-ops instrument style: graphite panels on an engineering 
 
 ## About the team
 
-**Phoebe Tseng (曾允蓮) · Team Lead**
+<img src="docs/team_phoebe_award.jpg" width="180" alt="Phoebe Tseng holding the 2026 Taiwan SMART on FHIR Top 50 award">
+
+**Phoebe Tseng (曾允蓮) · Team Lead — holding the 2026 Taiwan SMART on FHIR Top 50 award**
 
 - Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)
 - Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)

@@ -16,7 +16,7 @@ All dates Asia/Taipei. Commit hashes refer to this repository.
 - Pain point → innovation map (PX-00) with public NASA / IOM sources, plus a one-line strip on the first screen.
 - Roadmap / path to flight panel (FX-01), labeled FUTURE: analogs → LEO → Artemis → Mars, planned capabilities, Earth spin-off. No partnerships implied.
 - Recorded on-device model output (qwen3.8-flash-next, local vLLM, 2026-11-15 21:10 UTC+8) shown, clearly labeled, when no live local model answers and in `?demo=1`; embedded verbatim; self-test T6.
-- About the team: team lead credentials and Storm Media article link (also in README References).
+- About the team: team lead photo holding the 2026 SMART on FHIR Top 50 award (bystander blurred), credentials and Storm Media article link (also in README References).
 - README: hero screenshots, pitch, live demo links, judge 60-second tour.
 - Deploy it today panel (DX-01): offline single file, 3-step how to run, pilot-ready (not deployed) line.
 
