@@ -677,11 +677,9 @@
       <section class="card" id="about-team">
         <h2 id="t-team">About the team</h2>
         <figure class="team-fig">
-          <img src="docs/team_phoebe.jpg" width="120" height="120" alt="Phoebe Tseng, team lead" loading="lazy">
           <figcaption>
             <b>Phoebe Tseng (曾允蓮) · Team Lead</b>
             <ul class="team-list" id="team-list"></ul>
-            <span class="team-credit" id="team-credit"></span>
           </figcaption>
         </figure>
         <p class="muted team-cred" id="team-cred"></p>
@@ -2302,10 +2300,10 @@ function srcLinks(arr){ return arr.map(function(s){ return "<a href='" + s[1] + 
 var PAIN_STRIP = { en:[["Comms delay","on-device AI"],["Non-physician CMO","explainable rules"],["Under-reporting","crew-owned log"],["Medical privacy","no network"],["Recovery handoff","FHIR R4"]], zh:[["通訊延遲","地端 AI"],["醫官非醫師","可解釋規則"],["症狀少報","太空人自主紀錄"],["醫療隱私","不連網"],["返航交接","FHIR R4"]] };
 function renderPainStrip(){ var el = $("pain-strip"); if (!el) return; el.innerHTML = PAIN_STRIP[lang].map(function(x){ return "<span><b>" + x[0] + "</b> → <i>" + x[1] + "</i></span>"; }).join("") + "<a class='more' href='#pain-panel'>" + (lang==="zh" ? "PX-00 出處 ↓" : "PX-00 sources ↓") + "</a>"; }
 var TEAM = {
-  en: { list:["Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)","Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)","Featured in <a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>Storm Media (Taiwan, 2026-09-09)</a> on on-premise medical AI and SMART on FHIR"], credit:"Photo: 蔡孝如攝 / Storm Media" },
-  zh: { list:["2026 SMART on FHIR 全國 50 大得獎（台灣）","參加 2026 台灣聯測松（FHIR 互通測試）","接受<a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>風傳媒專訪（2026-09-09）</a>，談地端醫療 AI 與 SMART on FHIR"], credit:"照片：蔡孝如攝 / 風傳媒" }
+  en: { list:["Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)","Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)","Featured in <a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>Storm Media (Taiwan, 2026-09-09)</a> on on-premise medical AI and SMART on FHIR"] },
+  zh: { list:["2026 SMART on FHIR 全國 50 大得獎（台灣）","參加 2026 台灣聯測松（FHIR 互通測試）","接受<a href='https://www.storm.mg/article/11163136' target='_blank' rel='noopener'>風傳媒專訪（2026-09-09）</a>，談地端醫療 AI 與 SMART on FHIR"] }
 };
-function renderTeam(){ var t = TEAM[lang]; if (!$("team-list")) return; $("team-list").innerHTML = t.list.map(function(x){ return "<li>" + x + "</li>"; }).join(""); $("team-credit").textContent = t.credit; }
+function renderTeam(){ var t = TEAM[lang]; if (!$("team-list")) return; $("team-list").innerHTML = t.list.map(function(x){ return "<li>" + x + "</li>"; }).join(""); }
 function renderFuture(){
   renderPainStrip();
   renderTeam();

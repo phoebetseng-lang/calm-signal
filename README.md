@@ -121,15 +121,13 @@ A flight-deck / mission-ops instrument style: graphite panels on an engineering 
 
 ## About the team
 
-<img src="docs/team_phoebe.jpg" width="140" alt="Phoebe Tseng, team lead">
-
 **Phoebe Tseng (曾允蓮) · Team Lead**
 
 - Award winner, 2026 SMART on FHIR national Top 50 (Taiwan)
 - Took part in 2026 Taiwan Connectathon (FHIR interoperability testing)
 - Featured in [Storm Media (Taiwan, 2026-09-09)](https://www.storm.mg/article/11163136) on on-premise medical AI and SMART on FHIR
 
-That interoperability experience shaped the FHIR recovery handoff in this demo. Photo: 蔡孝如攝 / Storm Media.
+That interoperability experience shaped the FHIR recovery handoff in this demo.
 
 ## How to run
 
@@ -195,7 +193,7 @@ The challenge idea (an offline self-assessment dashboard, labeled simulated indi
 
 ## References (software, data, and tools)
 
-- Storm Media (Taiwan), interview with the team lead on on-premise medical AI and SMART on FHIR, 2026-09-09: https://www.storm.mg/article/11163136 (team photo credit: 蔡孝如攝 / Storm Media)
+- Storm Media (Taiwan), interview with the team lead on on-premise medical AI and SMART on FHIR, 2026-09-09: https://www.storm.mg/article/11163136
 
 Shipped with this folder:
 
